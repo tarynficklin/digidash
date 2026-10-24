@@ -4,7 +4,12 @@ import "./Bgp.css";
 import { connect } from "react-redux";
 import { setTheme, setColor, setBG } from "../../ducks/reducer";
 import { Scrollbars } from "../common/Scrollbars";
+import LocalUploader from "../common/LocalUploader";
 import { getPalette } from "../../lib/palette";
+
+// Unsplash serves resized copies via query params; uploaded files are used as-is.
+const sized = (url, params) =>
+  url.includes("images.unsplash.com") ? `${url}&${params}` : url;
 
 class Bgp extends Component {
   constructor() {
@@ -65,10 +70,17 @@ class Bgp extends Component {
   bigPicture(index, image) {
     this.setState({ showBig: true, selected: index, image });
     // Palette is computed in the browser now (was PUT /api/vibrant).
-    getPalette(`${image}&auto=format&fit=crop&w=200&q=80`)
+    getPalette(sized(image, "auto=format&fit=crop&w=200&q=80"))
       .then((vibrant) => this.setState({ vibrant }))
       .catch((err) => console.log("Could not read colors from image", err));
   }
+
+  // An uploaded file joins the thumbnails (same shape as an Unsplash result) and
+  // opens in the preview, so it goes through the usual palette + Finalize flow.
+  useUpload = ({ publicUrl }) => {
+    const item = { urls: { raw: publicUrl, regular: publicUrl, small: publicUrl } };
+    this.setState((state) => ({ imgs: [item, ...state.imgs] }), () => this.bigPicture(0, publicUrl));
+  };
 
   chooseColor(color, theme) {
     this.setState({ color, theme });
@@ -77,7 +89,7 @@ class Bgp extends Component {
   changeTheme() {
     const { user_id, setTheme, setColor, setBG } = this.props;
     const { image, color, theme } = this.state;
-    let newImage = `${image}&auto=format&fit=crop&w=1920&q=80`;
+    let newImage = sized(image, "auto=format&fit=crop&w=1920&q=80");
     setTheme(theme);
     setColor(color);
     setBG(image);
@@ -111,6 +123,12 @@ class Bgp extends Component {
               <button onClick={() => this.performSearch()} id="searchButton">
                 <i className="fas fa-search"></i>
               </button>
+              <LocalUploader
+                onFinish={this.useUpload}
+                onError={(message) => console.log("Upload failed:", message)}
+              >
+                <i className="fas fa-upload"></i>
+              </LocalUploader>
             </div>
           </div>
         ) : null}

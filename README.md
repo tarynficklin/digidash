@@ -29,12 +29,12 @@ Configuration lives in `.env` (Bun loads it automatically; variables already set
 | `REACT_APP_UNSPLASH` | browser: background picker (Unsplash search) |
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
-| `REACT_APP_DICTIONARY_ID`, `REACT_APP_DICTIONARY_KEY` | API: Dictionary widget (Oxford Dictionaries) |
-| `REACT_APP_WEATHERKEY` | API: Weather widget (Dark Sky) |
 | `REACT_APP_PLACES` | API: Restaurants widget (Google Places) |
+| `UPLOAD_DIR` | API: where uploaded images are stored (default `./uploads`, gitignored) |
 
 `REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `vite.config.js`).
-The old Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`) are no longer used.
+No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`), the Oxford Dictionaries keys
+(`REACT_APP_DICTIONARY_ID`, `REACT_APP_DICTIONARY_KEY`) and the Dark Sky key (`REACT_APP_WEATHERKEY`).
 
 ## Running
 
@@ -48,7 +48,7 @@ bun run preview   # preview ./build with Vite on port 3101
 bun test          # unit tests (bun:test)
 ```
 
-In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api` and `/widget` to the API on `SERVER_PORT`.
+In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api`, `/widget` and `/uploads` to the API on `SERVER_PORT`.
 To use other ports for a session: `SERVER_PORT=6104 bun run server` and `SERVER_PORT=6104 bun run client --port 5104`.
 
 ## Login
@@ -77,17 +77,21 @@ as `db.users.find_user([...])` and so on. One statement per file.
 
 ## Third-party APIs
 
-Several services the widgets were built on have since been shut down or changed:
+The weather, dictionary and currency widgets now use free APIs that need no key. The API reshapes each response into the
+format the widget was written against, so the widgets themselves are unchanged:
 
-- Weather: Dark Sky was shut down (`api.darksky.net` no longer resolves).
-- Bitcoin: CoinDesk's `api.coindesk.com/v1/bpi` API no longer resolves.
-- Currency: the keyless `free.currencyconverterapi.com/api/v5` endpoint now returns errors.
-- Dictionary: Oxford Dictionaries v2 needs a paid key.
+| Widget | Was | Now |
+|---|---|---|
+| Weather | Dark Sky (shut down) | [Open-Meteo](https://open-meteo.com), 7-day daily forecast in °F / mph |
+| Dictionary | Oxford Dictionaries v2 (paid key) | [Free Dictionary API](https://dictionaryapi.dev) |
+| Currency | `free.currencyconverterapi.com` v5 (retired) | [Frankfurter](https://frankfurter.dev) (European Central Bank rates) |
 
-The API returns `502` with a short message when an upstream call fails instead of crashing.
+Still broken: Bitcoin (CoinDesk's `api.coindesk.com/v1/bpi` no longer resolves) and the key-based Stocks and Restaurants widgets
+when their keys aren't set. The API returns `502` with a short message when an upstream call fails instead of crashing.
 
-## S3 uploads (work in progress)
+## Uploads (local file storage)
 
-`src/components/common/S3Uploader.jsx` replaces `react-s3-uploader`, which doesn't work with React 19 and depends on the end-of-life aws-sdk v2.
-It has the same props and signing contract. No server signing route exists yet: one would return `{ signedUrl, publicUrl }` for
-`?objectName=&contentType=`, for example using `@aws-sdk/s3-request-presigner`.
+The S3 uploader experiment is replaced by local file storage. `POST /api/uploads` (multipart field `file`; JPEG, PNG, WebP,
+GIF or AVIF up to 10 MB; requires a session) saves the image to `UPLOAD_DIR/<user_id>/<uuid>.<ext>` and returns
+`{ key, publicUrl }`; files are served at `/uploads/...`. The background picker's upload button uses it
+(`src/components/common/LocalUploader.jsx`), so you can use your own image as the dashboard background.

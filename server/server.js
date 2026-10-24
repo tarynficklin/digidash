@@ -10,6 +10,7 @@ import { HTTPException } from 'hono/http-exception';
 import authController, { requireUser } from './controllers/authController.js';
 import widgetController from './controllers/widgetController.js';
 import apiController from './controllers/apiController.js';
+import uploadController, { MAX_UPLOAD_BYTES, uploadDir } from './controllers/uploadController.js';
 import { connect, describeError } from './db.js';
 
 //SERVER SETUP
@@ -19,6 +20,8 @@ const isProduction = NODE_ENV === 'production';
 const root = path.join(import.meta.dirname, '..');
 
 const db = connect(CONNECTION_STRING, path.join(root, 'db'));
+const uploadsDir = uploadDir(root);
+const uploads = uploadController(uploadsDir);
 const app = new Hono();
 
 //MIDDLEWARE
@@ -26,8 +29,11 @@ app.use('*', async (c, next) => {
   c.set('db', db);
   await next();
 });
-const limit = bodyLimit({ maxSize: 1024 * 1024, onError: (c) => c.json({ error: 'Request body too large.' }, 413) });
-app.use('/api/*', limit);
+const tooLarge = (c) => c.json({ error: 'Request body too large.' }, 413);
+const limit = bodyLimit({ maxSize: 1024 * 1024, onError: tooLarge });
+// Uploads get a bigger allowance (plus multipart overhead); everything else stays at 1 MB.
+const uploadLimit = bodyLimit({ maxSize: MAX_UPLOAD_BYTES + 64 * 1024, onError: tooLarge });
+app.use('/api/*', (c, next) => (c.req.path === '/api/uploads' ? uploadLimit(c, next) : limit(c, next)));
 app.use('/widget/*', limit);
 
 //AUTH ENDPOINTS (local login; Auth0 is gone)
@@ -59,6 +65,10 @@ app.post('/api/weather', apiController.weather);
 app.put('/api/unsplash/:user_id', requireUser, apiController.unsplash);
 app.post('/api/getcurency', apiController.getcurency);
 app.post('/api/getplaces', apiController.getplaces);
+
+//UPLOADS (local file storage, see controllers/uploadController.js)
+app.post('/api/uploads', requireUser, uploads.create);
+app.use('/uploads/*', serveStatic({ root: uploadsDir, rewriteRequestPath: (p) => p.replace(/^\/uploads/, '') }));
 
 app.all('/api/*', (c) => c.json({ error: 'Not found.' }, 404));
 

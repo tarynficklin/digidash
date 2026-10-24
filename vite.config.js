@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const proxy = {
     '/api': { target: apiTarget },
     '/widget': { target: apiTarget },
+    '/uploads': { target: apiTarget },
   };
 
   return {

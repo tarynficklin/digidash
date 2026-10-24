@@ -22,3 +22,5 @@ yarn-error.log*
 
 .env
 .env.prod
+# local file uploads (server/controllers/uploadController.js)
+/uploads
