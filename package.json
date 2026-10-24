@@ -10,7 +10,7 @@
     "bun": ">=1.4.4"
   },
   "scripts": {
-    "dev": "bun --bun concurrently -k -n api,web -c blue,green \"bun run server\" \"bun run client\"",
+    "dev": "bun --bun concurrently -k -n api,web -c blue,green \"bun run server\" \"bun server/wait-for-api.js && bun run client\"",
     "server": "bun server/server.js",
     "client": "bun --bun vite",
     "build": "bun --bun vite build",
