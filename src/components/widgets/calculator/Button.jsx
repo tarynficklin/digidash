@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import './Button.css';
 
 class Button extends Component {
@@ -27,10 +26,5 @@ Button.defaultProps = {
   onClick: null,
 };
 
-Button.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.string,
-  onClick: PropTypes.func,
-};
 
 export default Button;

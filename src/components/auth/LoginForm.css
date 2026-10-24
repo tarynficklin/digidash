@@ -1,0 +1,78 @@
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.login-panel {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: white;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  user-select: text;
+}
+
+.login-tabs {
+  display: flex;
+  gap: 20px;
+}
+
+.login-tabs button {
+  padding: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
+}
+
+.login-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 300;
+}
+
+.login-panel input {
+  height: 34px;
+  padding: 0 4px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+.login-error {
+  font-size: 12px;
+  color: rgb(255, 120, 120);
+  text-transform: none;
+}
+
+.login-submit {
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+.login-submit:disabled {
+  opacity: 0.5;
+}
+
+.login-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+}

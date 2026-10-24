@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import './Weather.css'
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import Skycons from 'react-skycons'
-import { Scrollbars } from 'react-custom-scrollbars';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from '../../common/PlacesAutocomplete';
+import WeatherIcon from './WeatherIcon'
+import { Scrollbars } from '../../common/Scrollbars';
 import {weatherCheck1,weatherCheck2,weatherCheck3,weatherCheck4,weatherCheck5} from '../../../logic/logic'
 export default class Autocomplete extends Component {
   constructor(props) {
@@ -53,14 +53,10 @@ export default class Autocomplete extends Component {
       iconz = iconz.replace(/-/g, '_');
       let current = this.dayoftheweek(day.getDay())
       display.push(
-        <div className='card' onClick={() => this.setDay(i, current, iconz)}>
+        <div className='card' key={i} onClick={() => this.setDay(i, current, iconz)}>
           <p>{current}</p>
           <div >
-            <Skycons
-              color='white'
-              icon={iconz}
-              autoplay={true}
-            />
+            <WeatherIcon color='white' icon={iconz} />
           </div>
           <p>{weather[i].apparentTemperatureHigh}°F</p>
           <p>{weather[i].apparentTemperatureLow}°F</p>
@@ -86,7 +82,7 @@ export default class Autocomplete extends Component {
       <div>
         <button className="back-button" onClick={() => this.unset()}><i className="fas fa-caret-left"></i></button>
         <p>{day.day}</p>
-        <div ><Skycons color='white' icon={day.icon} autoplay={true} /></div>
+        <div ><WeatherIcon color='white' icon={day.icon} /></div>
         <p>High: {weather[ind].apparentTemperatureHigh}°F</p>
         <p>Low: {weather[ind].apparentTemperatureLow}°F</p>
         <p>{weather[ind].summary}</p>
@@ -144,7 +140,7 @@ export default class Autocomplete extends Component {
                   // inline style for demonstration purpose
                   const style = suggestion.active ? { backgroundColor: '#fafafa', color: 'black', cursor: 'pointer' } : { backgroundColor: 'white', color: 'black', cursor: 'pointer' };
                   return (
-                    <div {...getSuggestionItemProps(suggestion, { className, style })}>
+                    <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { className, style })}>
                       <span>{suggestion.description}</span>
                     </div>
                   );
@@ -161,7 +157,7 @@ export default class Autocomplete extends Component {
 		</div>}
 		</Scrollbars>
       <div className="theme-glow"></div>
-			<div className="theme-accent"><i class="fas fa-arrows-alt"></i></div>
+			<div className="theme-accent"><i className="fas fa-arrows-alt"></i></div>
       </div>
     );
   }

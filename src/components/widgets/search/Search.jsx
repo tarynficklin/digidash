@@ -24,7 +24,7 @@ class Search extends Component {
 				<input onChange={(e) => this.handleInput(e.target.value)} onKeyDown={this.keyPress} className="theme-input"/>
 				<a href={`${this.state.selected}${this.state.search}`} target="_blank" id="searchButton"><button className="theme-text">Go</button></a>
 				<div className="theme-glow"></div>
-				<div className="theme-accent" style={{border: `none`}}><i class="fas fa-arrows-alt"></i></div>
+				<div className="theme-accent" style={{border: `none`}}><i className="fas fa-arrows-alt"></i></div>
 			</div>
 		);
 	}

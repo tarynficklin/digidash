@@ -43,7 +43,7 @@ export default class Dictionary extends Component {
 					}
 				</div>
 				<div className="theme-glow"></div>
-				<div className="theme-accent"><i class="fas fa-arrows-alt"></i></div>
+				<div className="theme-accent"><i className="fas fa-arrows-alt"></i></div>
 			</div>
 		)
 	}

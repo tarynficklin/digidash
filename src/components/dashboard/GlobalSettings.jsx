@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './GlobalSettings.css'
 import { connect } from 'react-redux'
-import { setTheme, setFlavor, setSearch, setCollision, setCompact } from '../../ducks/reducer'
+import { setTheme, setFlavor, setCollision, setCompact } from '../../ducks/reducer'
 import Bgp from './Bgp'
 
 class GlobalSettings extends Component {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import { formatShortDate } from '../../../lib/time';
 import './Bitcoin.css';
 import BitCoinTheme from './BitCoinTheme';
 import LineChart from './LineChart';
@@ -32,7 +32,7 @@ class Bitcoin extends Component {
           let count = 0;
           for (let date in bitcoinData.bpi) {
             sortedData.push({
-              d: moment(date).format('MMM DD'),
+              d: formatShortDate(date),
               p: bitcoinData.bpi[date].toLocaleString('us-EN', { style: 'currency', currency: 'USD' }),
               x: count, //previous days
               y: bitcoinData.bpi[date] // numerical price
@@ -78,7 +78,7 @@ class Bitcoin extends Component {
           <div id="coindesk"> Powered by <a href="http://www.coindesk.com/price/">CoinDesk</a></div>
         </div>
         <div className="theme-glow"></div>
-        <div className="theme-accent"><i class="fas fa-arrows-alt"></i></div>
+        <div className="theme-accent"><i className="fas fa-arrows-alt"></i></div>
       </div>
 
     );

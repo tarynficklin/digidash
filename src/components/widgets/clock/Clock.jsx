@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ClockTheme from './ClockTheme';
 import Clock from 'react-clock';
+import 'react-clock/dist/Clock.css';
 import Digital from './Digital'
 import axios from 'axios'
 import './Clock.css'
@@ -58,7 +59,7 @@ class WidgetClock extends Component {
 
         <div>{show ? <Clock value={this.state.date} size={125} /> : <Digital />}</div>
         <div className="theme-glow"></div>
-        <div className="theme-accent"><i class="fas fa-arrows-alt"></i></div>
+        <div className="theme-accent"><i className="fas fa-arrows-alt"></i></div>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import { fromNow } from '../../../lib/time';
 import './InfoBox.css';
 
 class InfoBox extends Component {
@@ -46,7 +46,7 @@ class InfoBox extends Component {
         { this.state.currentPrice ?
           <div id="left" className='box'>
             <div className="heading">{this.state.currentPrice.toLocaleString('us-EN',{ style: 'currency', currency: 'USD' })}</div>
-            <div className="subtext">{'Updated ' + moment(this.state.updatedAt ).fromNow()}</div>
+            <div className="subtext">{'Updated ' + fromNow(this.state.updatedAt)}</div>
           </div>
         : null}
         { this.state.currentPrice ?

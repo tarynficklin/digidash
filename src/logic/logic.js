@@ -72,5 +72,12 @@ const logic = {
 	}
 };
 
-module.exports = logic;
+export const {
+	noteCheck1, noteCheck2, noteCheck3, noteCheck4, noteCheck5,
+	weatherCheck1, weatherCheck2, weatherCheck3, weatherCheck4, weatherCheck5,
+	favoritesCheck1, favoritesCheck2, favoritesCheck3, favoritesCheck4, favoritesCheck5,
+	clockCheck1, clockCheck2, clockCheck3, clockCheck4, clockCheck5,
+} = logic;
+
+export default logic;
 

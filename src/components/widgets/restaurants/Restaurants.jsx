@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios'
 import marker from './Map-Marker-Marker-Outside-Chartreuse.png'
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from '../../common/PlacesAutocomplete';
 const AnyReactComponent = ({ img }) => <div>{img}</div>;
 
 class Restaurants extends Component {
@@ -55,7 +55,7 @@ class Restaurants extends Component {
     }
 
     render() {
-        const { REACT_APP_GOOGLE } = process.env
+        const REACT_APP_GOOGLE = import.meta.env.REACT_APP_GOOGLE
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -81,7 +81,7 @@ class Restaurants extends Component {
                                         // inline style for demonstration purpose
                                         const style = suggestion.active ? { backgroundColor: '#fafafa', color: 'black', cursor: 'pointer' } : { backgroundColor: 'white', color: 'black', cursor: 'pointer' };
                                         return (
-                                            <div {...getSuggestionItemProps(suggestion, { className, style })}>
+                                            <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { className, style })}>
                                                 <span>{suggestion.description}</span>
                                             </div>
                                         );

@@ -1,4 +1,7 @@
-const {noteCheck1,noteCheck2,noteCheck3,noteCheck4,noteCheck5} = require('../Logic/logic');
+import { describe, test, expect } from 'bun:test';
+import logic from '../logic/logic.js';
+
+const {noteCheck1,noteCheck2,noteCheck3,noteCheck4,noteCheck5} = logic;
 
 
 describe('Tests the props from Note', ()=>{
@@ -20,7 +23,7 @@ describe('Tests the props from Note', ()=>{
 })
 
 
-const {favoritesCheck1,favoritesCheck2,favoritesCheck3,favoritesCheck4,favoritesCheck5} = require('../Logic/logic');
+const {favoritesCheck1,favoritesCheck2,favoritesCheck3,favoritesCheck4,favoritesCheck5} = logic;
 
 
 describe('Tests the props from Favorites', ()=>{
@@ -42,7 +45,7 @@ describe('Tests the props from Favorites', ()=>{
 })
 
 
-const {clockCheck1,clockCheck2,clockCheck3,clockCheck4,clockCheck5} = require('../Logic/logic');
+const {clockCheck1,clockCheck2,clockCheck3,clockCheck4,clockCheck5} = logic;
 
 
 describe('Tests the props from clock', ()=>{
@@ -65,7 +68,7 @@ describe('Tests the props from clock', ()=>{
 
 
 //Adams tests
-const {weatherCheck1,weatherCheck2,weatherCheck3,weatherCheck4,weatherCheck5} = require('../Logic/logic');
+const {weatherCheck1,weatherCheck2,weatherCheck3,weatherCheck4,weatherCheck5} = logic;
 
 
 describe('Tests the props from weather', ()=>{

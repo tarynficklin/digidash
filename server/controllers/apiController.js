@@ -1,86 +1,81 @@
-const axios      = require('axios');
-const Dictionary = require('oxford-dictionary');
-const Vibrant    = require('node-vibrant');
+// Third-party API proxies used by the widgets. Keys come from .env (names kept
+// from the CRA days). Several of these services have been shut down or changed
+// since 2018; failures are reported as 502 instead of crashing the server.
+import axios from 'axios';
+import { readJson } from '../http.js';
 
-require('dotenv').config();
-const { REACT_APP_WEATHERKEY, REACT_APP_DICTIONARY_ID, REACT_APP_DICTIONARY_KEY,REACT_APP_PLACES } = process.env
+const { REACT_APP_WEATHERKEY, REACT_APP_DICTIONARY_ID, REACT_APP_DICTIONARY_KEY, REACT_APP_PLACES } = process.env;
 
-const config = {
-	app_id      : REACT_APP_DICTIONARY_ID,
-	app_key     : REACT_APP_DICTIONARY_KEY,
-	source_lang : 'en'
+// Describe an upstream failure without echoing request URLs (they contain API keys).
+function upstreamError(c, service, err) {
+  const message = err?.response
+    ? `${service} responded with HTTP ${err.response.status}`
+    : `${service} request failed (${err?.code || 'network error'})`;
+  console.error(message);
+  return c.json({ error: message }, 502);
 }
 
-const dict = new Dictionary(config)
+export default {
+  // Oxford Dictionaries API v2 (what the oxford-dictionary package called).
+  dictionary: async (c) => {
+    const { query } = await readJson(c);
+    const word = String(query ?? '').trim().toLowerCase();
+    if (!word) return c.json({ error: 'Missing query.' }, 400);
+    try {
+      const api = await axios.get(
+        `https://od-api.oxforddictionaries.com/api/v2/entries/en-us/${encodeURIComponent(word)}`,
+        {
+          params: { fields: 'definitions' },
+          headers: { Accept: 'application/json', app_id: REACT_APP_DICTIONARY_ID, app_key: REACT_APP_DICTIONARY_KEY },
+        }
+      );
+      return c.json(api.data);
+    } catch (err) {
+      return upstreamError(c, 'Oxford Dictionaries', err);
+    }
+  },
 
-module.exports = {
-	dictionary: async (req, res) => {
-		let lookup = await dict.definitions(req.body.query)
-		res.status(200).send(lookup)
-	},
+  // Dark Sky (shut down by Apple in 2023).
+  weather: async (c) => {
+    const { lat, lng } = await readJson(c);
+    try {
+      const api = await axios.get(`https://api.darksky.net/forecast/${REACT_APP_WEATHERKEY}/${lat},${lng}`);
+      return c.json(api.data);
+    } catch (err) {
+      return upstreamError(c, 'Dark Sky', err);
+    }
+  },
 
-	weather: (req, res) => {
-		const db = req.app.get('db');
-		const { lat, lng } = req.body
+  getplaces: async (c) => {
+    const { lat, lng } = await readJson(c);
+    try {
+      const api = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', {
+        params: { location: `${lat},${lng}`, radius: 1500, type: 'restaurant', keyword: 'cruise', key: REACT_APP_PLACES },
+      });
+      return c.json(api.data);
+    } catch (err) {
+      return upstreamError(c, 'Google Places', err);
+    }
+  },
 
-		axios.get(`https://api.darksky.net/forecast/${REACT_APP_WEATHERKEY}/${lat},${lng}`)
-			.then(api => { res.status(200).send(api.data) })
-	},
-	getplaces: (req, res) => {
-		const db = req.app.get('db');
-		const { lat, lng } = req.body
+  // Saves the background picked in the Unsplash picker (behind requireUser).
+  unsplash: async (c) => {
+    const db = c.get('db');
+    const { image, color, theme } = await readJson(c);
+    const [user] = await db.users.user_wallpaper([image, color, theme, c.get('userId')]);
+    return c.json(user);
+  },
 
-		axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=restaurant&keyword=cruise&key=${REACT_APP_PLACES}`)
-			.then(api => { res.status(200).send(api.data) })
-	},
-
-	vibrant: async (req, res) => {
-		const db = req.app.get('db');
-		const { image } = req.body
-
-		let swatch = await Vibrant.from(image).getPalette((err, palette) => palette)
-
-		function colorSelect(flavor) {
-			if (swatch[flavor]) {
-				let r = Math.trunc(swatch[flavor]._rgb[0]);
-				let g = Math.trunc(swatch[flavor]._rgb[1]);
-				let b = Math.trunc(swatch[flavor]._rgb[2]);
-				return `${r}, ${g}, ${b}`
-			}
-			else { return null }
-		}
-
-		let package = {
-			vibrant      : colorSelect('Vibrant'),
-			muted        : colorSelect('Muted'),
-			lightVibrant : colorSelect('LightVibrant'),
-			lightMuted   : colorSelect('LightMuted'),
-			darkVibrant  : colorSelect('DarkVibrant'),
-			darkMuted    : colorSelect('DarkMuted')
-		}
-
-		res.status(200).send(package)
-	},
-
-	unsplash: async (req, res) => {
-		const db = req.app.get('db');
-		const { user_id } = req.params
-		const { image, color, theme } = req.body
-
-		db.users.user_wallpaper([image, color, theme, user_id])
-			.then (user => res.status(200).send(user))
-			.catch(err  => console.log(`Error Message: ${err}`))
-	},
-	getcurency:(req,res,next) =>{  
-        const db = req.app.get('db');
-        const {val1,val2} = req.body
-        //change  location
-        console.log(val1)
-        // db.getMaster()
-        // .then(data=>{
-        axios.get(`http://free.currencyconverterapi.com/api/v5/convert?q=${val1}_${val2}&count=2`).then(response=>{
-
-        res.status(200).send(response.data)
-        // })
-      })}
-}
+  // free.currencyconverterapi.com v5 (keyless endpoint, since retired).
+  getcurency: async (c) => {
+    const { val1, val2 } = await readJson(c);
+    try {
+      const api = await axios.get('http://free.currencyconverterapi.com/api/v5/convert', {
+        params: { q: `${val1}_${val2}`, count: 2 },
+      });
+      return c.json(api.data);
+    } catch (err) {
+      return upstreamError(c, 'Currency converter', err);
+    }
+  },
+};
