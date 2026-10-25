@@ -15,9 +15,13 @@ import cors from './cors.js';
 import { connect, describeError } from './db.js';
 
 //SERVER SETUP
-const { PORT, DATABASE_URL, NODE_ENV } = process.env;
+const { PORT, DATABASE_URL, NODE_ENV, SESSION_SECRET } = process.env;
 const port = Number(PORT) || 4040;
 const isProduction = NODE_ENV === 'production';
+if (isProduction && !SESSION_SECRET) {
+  console.error('SESSION_SECRET must be set in production (it signs the session cookies).');
+  process.exit(1);
+}
 const root = path.join(import.meta.dirname, '..');
 
 const db = connect(DATABASE_URL, path.join(root, 'db'));
@@ -48,12 +52,6 @@ app.post('/api/logout', authController.logout);
 app.get('/api/user-data', authController.user);
 app.put('/api/update/:user_id', requireUser, authController.update);
 app.delete('/api/purge/:user_id', requireUser, authController.purge);
-
-// DEV-ONLY BACK DOOR: GET /api/dev/login logs in as the seeded "demo" user with
-// no password and redirects to /. Never registered when NODE_ENV=production.
-if (!isProduction) {
-  app.get('/api/dev/login', authController.devLogin);
-}
 
 //WIDGET ENDPOINTS (scoped to the logged-in user)
 app.get('/widget/:user_id', requireUser, widgetController.read);
@@ -97,10 +95,6 @@ app.onError((err, c) => {
 //RUN THE SERVER
 const server = Bun.serve({ port, fetch: app.fetch, idleTimeout: 60 });
 console.log(`server started on port ${server.port}`);
-if (!isProduction)
-  console.log(
-    'dev back door enabled: GET /api/dev/login logs in as "demo" (NODE_ENV is not production)',
-  );
 db.ping()
   .then(() => console.log('connected to Postgres'))
   .catch((err) =>

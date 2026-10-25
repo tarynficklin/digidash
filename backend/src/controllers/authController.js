@@ -6,9 +6,6 @@ import { readJson } from '../http.js';
 import { hashPassword, verifyPassword } from '../passwords.js';
 import { endSession, getSessionUserId, startSession } from '../session.js';
 
-// The account seeded by db/master_seed.sql; used by the dev-only back door.
-export const DEV_USER = 'demo';
-
 // Never send password_hash to the browser.
 const publicUser = ({ password_hash, ...user }) => user;
 
@@ -68,17 +65,6 @@ export default {
 
     await startSession(c, row.user_id);
     return c.json(publicUser(row));
-  },
-
-  // DEV-ONLY back door (registered only when NODE_ENV !== 'production'):
-  // logs in as the seeded dev user without a password and redirects to the app.
-  devLogin: async (c) => {
-    const db = c.get('db');
-    const [row] = await db.users.find_user([DEV_USER]);
-    if (!row)
-      return c.json({ error: `Dev user "${DEV_USER}" not found. Run \`bun run db:seed\`.` }, 404);
-    await startSession(c, row.user_id);
-    return c.redirect('/', 302);
   },
 
   user: async (c) => {

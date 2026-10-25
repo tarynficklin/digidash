@@ -29,9 +29,9 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's
 | --- | --- |
 | `DATABASE_URL` | API: Postgres connection URL |
 | `PORT` | API port (default 4040); `frontend/.env`'s `VITE_API_URL` points the Vite proxy here |
-| `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
+| `SESSION_SECRET` | API: signs the session cookie. Required in production (the API won't start without it); locally it falls back to a fixed dev string |
 | `ALLOWED_ORIGINS` | API: browser origins that may call it from another address (CORS, with cookies), comma-separated, e.g. `http://localhost:3101`. Requests through the Vite proxy, or to the API serving `frontend/dist`, are same-origin and don't need it |
-| `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |
+| `NODE_ENV` | `production` makes `SESSION_SECRET` required (`bun run start:backend` sets it) |
 | `UNSPLASH_KEY` | API: the background picker's Unsplash search (`GET /api/unsplash/search`), so the key stays on the server |
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
@@ -50,7 +50,7 @@ bun run build           # production build into frontend/dist
 bun run build:frontend  # just the frontend (what Coolify's frontend builds with)
 bun run build:backend   # bundles backend/src into backend/dist to check its imports (it runs from src)
 bun run db:migrate      # create missing tables only (backend/db/schema.sql), no demo user: before each deployed start
-bun run start:backend   # API that also serves frontend/dist, with NODE_ENV=production (no dev back door)
+bun run start:backend   # API that also serves frontend/dist, with NODE_ENV=production (needs SESSION_SECRET)
 bun run start:frontend  # preview frontend/dist with Vite on port 3101
 bun run test            # unit tests (bun:test)
 bun run lint            # Biome (also the pre-commit hook)
@@ -67,14 +67,11 @@ the cookie, and sessions survive API restarts. Passwords are hashed with the bui
 **This is not secure and is only meant for local development.**
 
 Seeded dev account (from `backend/db/master_seed.sql`): username `demo` (or email `demo@digidash.test`), password `demo`.
-
-### Dev back door (no password)
-
-While `NODE_ENV` is not `production`, **http://localhost:3101/api/dev/login** logs you in as `demo` and redirects to the dashboard.
-It goes through the Vite proxy, so it works on the dev server's port. The route is not registered at all when `NODE_ENV=production`.
+Log in with it like any other account. It only exists where `bun run db:seed` has run, i.e. locally: deploys run
+`bun run db:migrate`, which creates missing tables without seeding, so production has no `demo` user.
 
 API: `POST /api/signup` `{ username, email?, password }`, `POST /api/login` `{ login, password }`, `GET|POST /api/logout`,
-`GET /api/user-data`, and (dev only) `GET /api/dev/login`. User settings (`/api/update/:user_id`, `/api/purge/:user_id`, `/api/unsplash/:user_id`), the Unsplash search (`/api/unsplash/search?query=`) and all `/widget/*` routes
+`GET /api/user-data`. User settings (`/api/update/:user_id`, `/api/purge/:user_id`, `/api/unsplash/:user_id`), the Unsplash search (`/api/unsplash/search?query=`) and all `/widget/*` routes
 require a session and only touch the logged-in user's data.
 
 ## Database
