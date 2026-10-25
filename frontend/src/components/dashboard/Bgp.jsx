@@ -42,14 +42,12 @@ class Bgp extends Component {
     }
   }
 
+  // The API searches Unsplash with its own key (UNSPLASH_KEY in backend/.env).
   performSearch = (query = this.state.input) => {
-    const REACT_APP_UNSPLASH = import.meta.env.REACT_APP_UNSPLASH;
     axios
-      .get(
-        `https://api.unsplash.com/search/photos/?page=1&per_page=40&query=${query}&client_id=${REACT_APP_UNSPLASH}`,
-      )
+      .get('/api/unsplash/search', { params: { query } })
       .then((res) => {
-        this.setState({ imgs: res.data.results });
+        this.setState({ imgs: res.data });
       })
       .catch((err) => {
         console.log('Error happened during fetching!', err);

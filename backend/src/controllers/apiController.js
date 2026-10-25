@@ -202,6 +202,26 @@ export default {
     }
   },
 
+  // GET /api/unsplash/search?query= (behind requireUser): the background picker's Unsplash
+  // search, with UNSPLASH_KEY kept here instead of in the browser. Answers Unsplash's results.
+  unsplashSearch: async (c) => {
+    const query = c.req.query('query');
+    const { UNSPLASH_KEY } = process.env;
+    if (typeof query !== 'string' || !query.trim())
+      return c.json({ error: 'Expected a search query.' }, 400);
+    if (!UNSPLASH_KEY) return c.json({ error: 'Unsplash is not configured.' }, 503);
+    try {
+      const api = await axios.get('https://api.unsplash.com/search/photos', {
+        // 30 is Unsplash's maximum; the 40 the picker used to ask for got the default 10
+        params: { page: 1, per_page: 30, query },
+        headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` },
+      });
+      return c.json(api.data?.results ?? []);
+    } catch (err) {
+      return upstreamError(c, 'Unsplash', err);
+    }
+  },
+
   // Saves the background picked in the Unsplash picker (behind requireUser).
   unsplash: async (c) => {
     const db = c.get('db');

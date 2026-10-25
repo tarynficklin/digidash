@@ -64,6 +64,7 @@ app.delete('/widget/:master_id', requireUser, widgetController.delete);
 app.post('/api/dictionary', apiController.dictionary);
 app.post('/api/weather', apiController.weather);
 // (/api/vibrant is gone: background palettes are computed in the browser, see src/lib/palette.js)
+app.get('/api/unsplash/search', requireUser, apiController.unsplashSearch);
 app.put('/api/unsplash/:user_id', requireUser, apiController.unsplash);
 app.post('/api/getcurency', apiController.getcurency);
 app.post('/api/getplaces', apiController.getplaces);

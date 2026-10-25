@@ -23,7 +23,7 @@ bun run db:seed      # (re)creates the tables from backend/db/master_seed.sql. W
 
 `bunfig.toml` sets a supply-chain cooldown: `bun install`/`bun add` never pick package versions published in the last 7 days.
 
-Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `REACT_APP_*` keys (Bun and Vite load them automatically; variables already set in your shell win):
+Configuration lives in `backend/.env`, plus an optional `frontend/.env` for the two browser keys below (Bun and Vite load them automatically; variables already set in your shell win):
 
 | Variable | Used by |
 | --- | --- |
@@ -31,7 +31,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `R
 | `SERVER_PORT` | API port (default 4040); the Vite proxy follows it |
 | `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
 | `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |
-| `REACT_APP_UNSPLASH` | browser: background picker (Unsplash search) |
+| `UNSPLASH_KEY` | API: the background picker's Unsplash search (`GET /api/unsplash/search`), so the key stays on the server |
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
 | `REACT_APP_PLACES` | API: Restaurants widget (Google Places) |
@@ -39,7 +39,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `R
 
 `REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `frontend/vite.config.js`).
 No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`), the Oxford Dictionaries keys
-(`REACT_APP_DICTIONARY_ID`, `REACT_APP_DICTIONARY_KEY`) and the Dark Sky key (`REACT_APP_WEATHERKEY`).
+(`REACT_APP_DICTIONARY_ID`, `REACT_APP_DICTIONARY_KEY`), the Dark Sky key (`REACT_APP_WEATHERKEY`), and `REACT_APP_UNSPLASH` (now the API's `UNSPLASH_KEY`).
 
 ## Running
 
@@ -70,7 +70,7 @@ While `NODE_ENV` is not `production`, **http://localhost:3101/api/dev/login** lo
 It goes through the Vite proxy, so it works on the dev server's port. The route is not registered at all when `NODE_ENV=production`.
 
 API: `POST /api/signup` `{ username, email?, password }`, `POST /api/login` `{ login, password }`, `GET|POST /api/logout`,
-`GET /api/user-data`, and (dev only) `GET /api/dev/login`. User settings (`/api/update/:user_id`, `/api/purge/:user_id`, `/api/unsplash/:user_id`) and all `/widget/*` routes
+`GET /api/user-data`, and (dev only) `GET /api/dev/login`. User settings (`/api/update/:user_id`, `/api/purge/:user_id`, `/api/unsplash/:user_id`), the Unsplash search (`/api/unsplash/search?query=`) and all `/widget/*` routes
 require a session and only touch the logged-in user's data.
 
 ## Database
