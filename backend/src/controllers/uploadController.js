@@ -1,5 +1,5 @@
 // Local file storage for user uploads (replaces the S3 uploader experiment). Files live in the
-// app's data folder, DATA_PATH (e.g. E:/Documents/Sites/digidash), as in the lockwood apps:
+// app's data folder, DATA_PATH (e.g. E:/Documents/Sites/legacy/digidash), as in the lockwood apps:
 // <DATA_PATH>/uploads/backgrounds/<user_id>/<file>, served back at /uploads/backgrounds/....
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';

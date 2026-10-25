@@ -35,7 +35,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `R
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
 | `REACT_APP_PLACES` | API: Restaurants widget (Google Places) |
-| `DATA_PATH` | API (required): the app's data folder, e.g. `E:/Documents/Sites/digidash`. Uploaded images go to `<DATA_PATH>/uploads/backgrounds` |
+| `DATA_PATH` | API (required): the app's data folder, e.g. `E:/Documents/Sites/legacy/digidash`. Uploaded images go to `<DATA_PATH>/uploads/backgrounds` |
 
 `REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `frontend/vite.config.js`).
 No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`), the Oxford Dictionaries keys
