@@ -1,0 +1,33 @@
+{
+  "name": "digidash",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "bunx biome check .",
+    "lint:fix": "bunx biome check . --write",
+    "format": "bunx biome format . --write",
+    "db:seed": "turbo run db:seed",
+    "start:frontend": "turbo run preview --filter=@digidash/frontend",
+    "start:backend": "turbo run start --filter=@digidash/backend",
+    "health:backend": "bun backend/scripts/healthcheck.js",
+    "health:frontend": "bun frontend/scripts/healthcheck.js",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.10",
+    "husky": "^9.1.7",
+    "turbo": "^2.9.5"
+  },
+  "trustedDependencies": [],
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "node": ">=24"
+  }
+}

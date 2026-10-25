@@ -1,15 +1,15 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { apiTarget } from './scripts/api-target.js';
 
 export default defineConfig(({ mode }) => {
-  // Read .env the same way the API does, so the proxy follows SERVER_PORT.
-  // A SERVER_PORT already set in the shell wins over the .env value.
-  const env = loadEnv(mode, process.cwd(), '');
-  const apiTarget = `http://localhost:${env.SERVER_PORT || 4040}`;
+  // The proxy follows the backend's SERVER_PORT (default 4040), read from backend/.env or the
+  // shell (see scripts/api-target.js).
+  const target = apiTarget(mode);
   const proxy = {
-    '/api': { target: apiTarget },
-    '/widget': { target: apiTarget },
-    '/uploads': { target: apiTarget },
+    '/api': { target },
+    '/widget': { target },
+    '/uploads': { target },
   };
 
   return {
@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => {
     // Fixed per-app dev port so all the legacy apps can run side by side.
     server: { port: 3101, strictPort: true, proxy },
     preview: { port: 3101, strictPort: true, proxy },
-    // The Express server serves ./build in production (`bun run start`).
-    build: { outDir: 'build' },
+    // The backend serves frontend/dist in production (`bun run start:backend`).
   };
 });

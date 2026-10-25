@@ -1,23 +1,13 @@
 {
-  "name": "digidash",
+  "name": "@digidash/frontend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "server/server.js",
-  "packageManager": "bun@1.4.4",
-  "engines": {
-    "node": ">=26.12.1",
-    "bun": ">=1.4.4"
-  },
   "scripts": {
-    "dev": "bun --bun concurrently -k -n api,web -c blue,green \"bun run server\" \"bun server/wait-for-api.js && bun run client\"",
-    "server": "bun server/server.js",
-    "client": "bun --bun vite",
+    "dev": "bun scripts/wait-for-api.js && bun --bun vite",
     "build": "bun --bun vite build",
     "preview": "bun --bun vite preview",
-    "start": "NODE_ENV=production bun server/server.js",
-    "db:seed": "bun server/seed.js",
-    "test": "bun test"
+    "test": "bun test src"
   },
   "dependencies": {
     "@vibrant/core": "^4.0.4",
@@ -27,8 +17,6 @@
     "axios": "^1.20.0",
     "chart.js": "^4.5.1",
     "google-map-react": "^2.2.5",
-    "hono": "^4.13.13",
-    "pg": "^8.23.1",
     "react": "^19.3.1",
     "react-chartjs-2": "^5.3.1",
     "react-clock": "^6.0.0",
@@ -39,7 +27,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.2",
-    "concurrently": "^10.0.6",
     "vite": "^8.3.4"
   }
 }

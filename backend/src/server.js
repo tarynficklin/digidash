@@ -1,5 +1,6 @@
-// Digidash API: Hono on Bun. Run with `bun server/server.js` (Bun loads .env;
-// variables already set in the environment win over the file).
+// Digidash API: Hono on Bun. Run with `bun run dev` at the repo root (Turborepo starts this
+// and the frontend), or `bun run start` in backend/. Bun loads backend/.env; variables already
+// set in the environment win over the file.
 import path from 'node:path';
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
@@ -70,10 +71,13 @@ app.post('/api/getplaces', apiController.getplaces);
 app.post('/api/uploads', requireUser, uploads.create);
 app.use('/uploads/*', serveStatic({ root: uploadsDir, rewriteRequestPath: (p) => p.replace(/^\/uploads/, '') }));
 
+// for the healthcheck scripts and the frontend's `bun run dev`
+app.get('/health', (c) => c.json({ status: 'ok' }));
+
 app.all('/api/*', (c) => c.json({ error: 'Not found.' }, 404));
 
-//PRODUCTION BUILD (like the old express.static(build))
-app.use('*', serveStatic({ root: path.join(root, 'build') }));
+//PRODUCTION BUILD (frontend/dist, like the old express.static(build))
+app.use('*', serveStatic({ root: path.join(root, '..', 'frontend', 'dist') }));
 
 app.onError((err, c) => {
   if (err instanceof HTTPException) return c.json({ error: err.message }, err.status);

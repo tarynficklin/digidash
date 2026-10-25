@@ -1,0 +1,4 @@
+# Normalize line endings: LF in the repo and in every working tree.
+# Without this, core.autocrlf=true checks files out as CRLF on Windows,
+# which fails `biome check` (Biome enforces LF).
+* text=auto eol=lf

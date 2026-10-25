@@ -1,7 +1,12 @@
 # Digidash
 
 A customizable dashboard of widgets (search, notes, clock, weather, dictionary, calculator, stocks, ...) on a draggable grid.
-React 19 + Vite frontend, [Hono](https://hono.dev) API on Bun, PostgreSQL.
+React 19 + Vite frontend, [Hono](https://hono.dev) API on Bun, PostgreSQL, as a Bun + Turborepo monorepo laid out like snowstack-lab:
+
+| Workspace | Package | Path | Purpose |
+| --- | --- | --- | --- |
+| Frontend | `@digidash/frontend` | `frontend/` | The dashboard (React 19, Vite 8, Redux) |
+| Backend | `@digidash/backend` | `backend/` | The API (Hono on Bun), with its SQL in `backend/db/` |
 
 ## Requirements
 
@@ -13,43 +18,42 @@ React 19 + Vite frontend, [Hono](https://hono.dev) API on Bun, PostgreSQL.
 
 ```sh
 bun install          # no native/compiled dependencies, no install scripts needed
-bun run db:seed      # (re)creates the tables from db/master_seed.sql. Wipes existing data!
+bun run db:seed      # (re)creates the tables from backend/db/master_seed.sql. Wipes existing data!
 ```
 
 `bunfig.toml` sets a supply-chain cooldown: `bun install`/`bun add` never pick package versions published in the last 7 days.
 
-Configuration lives in `.env` (Bun loads it automatically; variables already set in your shell win):
+Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `REACT_APP_*` keys (Bun and Vite load them automatically; variables already set in your shell win):
 
 | Variable | Used by |
 | --- | --- |
 | `CONNECTION_STRING` | API: Postgres connection URL |
 | `SERVER_PORT` | API port (default 4040); the Vite proxy follows it |
 | `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
-| `NODE_ENV` | `production` disables the dev back door (`bun run start` sets it) |
+| `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |
 | `REACT_APP_UNSPLASH` | browser: background picker (Unsplash search) |
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
 | `REACT_APP_PLACES` | API: Restaurants widget (Google Places) |
-| `UPLOAD_DIR` | API: where uploaded images are stored (default `./uploads`, gitignored) |
+| `UPLOAD_DIR` | API: where uploaded images are stored (default `backend/uploads`, gitignored) |
 
-`REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `vite.config.js`).
+`REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `frontend/vite.config.js`).
 No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`), the Oxford Dictionaries keys
 (`REACT_APP_DICTIONARY_ID`, `REACT_APP_DICTIONARY_KEY`) and the Dark Sky key (`REACT_APP_WEATHERKEY`).
 
 ## Running
 
 ```sh
-bun run dev       # API + Vite together (concurrently)
-bun run server    # API only: http://localhost:$SERVER_PORT (default 4040)
-bun run client    # Vite dev server only: http://localhost:3101 (fixed, strict port)
-bun run build     # production build into ./build
-bun run start     # API that also serves ./build, with NODE_ENV=production (no dev back door)
-bun run preview   # preview ./build with Vite on port 3101
-bun test          # unit tests (bun:test)
+bun run dev             # API, then Vite once the API's /health answers (Turborepo)
+bun run build           # production build into frontend/dist
+bun run start:backend   # API that also serves frontend/dist, with NODE_ENV=production (no dev back door)
+bun run start:frontend  # preview frontend/dist with Vite on port 3101
+bun run test            # unit tests (bun:test)
+bun run lint            # Biome (also the pre-commit hook)
 ```
 
-In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api`, `/widget` and `/uploads` to the API on `SERVER_PORT`.
-To use other ports for a session: `SERVER_PORT=6104 bun run server` and `SERVER_PORT=6104 bun run client --port 5104`.
+In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api`, `/widget` and `/uploads` to the API on `SERVER_PORT`, read from `backend/.env`.
+To move the API for a session, `SERVER_PORT=6104 bun run dev`; the proxy follows.
 
 ## Login
 
@@ -58,7 +62,7 @@ The session is a signed cookie (`digidash_session`, signed with `SESSION_SECRET`
 the cookie, and sessions survive API restarts. Passwords are hashed with the built-in `node:crypto` scrypt.
 **This is not secure and is only meant for local development.**
 
-Seeded dev account (from `db/master_seed.sql`): username `demo` (or email `demo@digidash.test`), password `demo`.
+Seeded dev account (from `backend/db/master_seed.sql`): username `demo` (or email `demo@digidash.test`), password `demo`.
 
 ### Dev back door (no password)
 
@@ -71,8 +75,8 @@ require a session and only touch the logged-in user's data.
 
 ## Database
 
-`db/master_seed.sql` is the schema plus seed data and is safe to re-run (it drops and recreates `users` and `master`).
-Query files live in `db/users/*.sql` and `db/widgets/*.sql` and are exposed by `server/db.js` (a small `pg` wrapper that replaced massive)
+`backend/db/master_seed.sql` is the schema plus seed data and is safe to re-run (it drops and recreates `users` and `master`).
+Query files live in `backend/db/users/*.sql` and `backend/db/widgets/*.sql` and are exposed by `backend/src/db.js` (a small `pg` wrapper that replaced massive)
 as `db.users.find_user([...])` and so on. One statement per file.
 
 ## Third-party APIs
@@ -94,4 +98,11 @@ when their keys aren't set. The API returns `502` with a short message when an u
 The S3 uploader experiment is replaced by local file storage. `POST /api/uploads` (multipart field `file`; JPEG, PNG, WebP,
 GIF or AVIF up to 10 MB; requires a session) saves the image to `UPLOAD_DIR/<user_id>/<uuid>.<ext>` and returns
 `{ key, publicUrl }`; files are served at `/uploads/...`. The background picker's upload button uses it
-(`src/components/common/LocalUploader.jsx`), so you can use your own image as the dashboard background.
+(`frontend/src/components/common/LocalUploader.jsx`), so you can use your own image as the dashboard background.
+
+## Tooling
+
+- **Turborepo** runs the workspaces' `dev`, `build`, `test` and `db:seed` scripts from the root (`turbo.json`).
+- **Biome** (pinned to `2.4.10`, like snowstack-lab) lints and formats everything. The config is the one shared by the legacy monorepos: snowstack-lab's, with a few old-code rules (hook dependencies, array-index keys, six accessibility rules) as warnings.
+- **Husky** runs `bunx biome check .` before each commit. `.gitattributes` keeps every file LF, which Biome expects.
+- `bun.lock` is committed, unlike snowstack-lab, so installs reproduce exactly and the cooldown applies to the versions it pins.

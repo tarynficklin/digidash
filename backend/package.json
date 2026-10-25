@@ -1,0 +1,16 @@
+{
+  "name": "@digidash/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/server.js",
+    "start": "NODE_ENV=production bun src/server.js",
+    "db:seed": "bun src/seed.js"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "hono": "^4.13.13",
+    "pg": "^8.23.1"
+  }
+}

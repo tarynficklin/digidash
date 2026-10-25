@@ -1,5 +1,5 @@
 // Local file storage for user uploads (replaces the S3 uploader experiment). Files are
-// written to UPLOAD_DIR (default: <project>/uploads) under the uploader's user id and
+// written to UPLOAD_DIR (default: backend/uploads) under the uploader's user id and
 // served back at /uploads/<user_id>/<file>.
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
