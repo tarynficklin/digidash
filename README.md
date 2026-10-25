@@ -27,7 +27,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's
 
 | Variable | Used by |
 | --- | --- |
-| `CONNECTION_STRING` | API: Postgres connection URL |
+| `DATABASE_URL` | API: Postgres connection URL |
 | `PORT` | API port (default 4040); `frontend/.env`'s `VITE_API_URL` points the Vite proxy here |
 | `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
 | `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |

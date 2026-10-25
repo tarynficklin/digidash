@@ -14,12 +14,12 @@ import widgetController from './controllers/widgetController.js';
 import { connect, describeError } from './db.js';
 
 //SERVER SETUP
-const { PORT, CONNECTION_STRING, NODE_ENV } = process.env;
+const { PORT, DATABASE_URL, NODE_ENV } = process.env;
 const port = Number(PORT) || 4040;
 const isProduction = NODE_ENV === 'production';
 const root = path.join(import.meta.dirname, '..');
 
-const db = connect(CONNECTION_STRING, path.join(root, 'db'));
+const db = connect(DATABASE_URL, path.join(root, 'db'));
 const uploadsDir = uploadDir();
 const uploads = uploadController(uploadsDir);
 const app = new Hono();
@@ -103,6 +103,6 @@ db.ping()
   .then(() => console.log('connected to Postgres'))
   .catch((err) =>
     console.error(
-      `could not connect to Postgres yet (requests will retry; check CONNECTION_STRING): ${describeError(err)}`,
+      `could not connect to Postgres yet (requests will retry; check DATABASE_URL): ${describeError(err)}`,
     ),
   );

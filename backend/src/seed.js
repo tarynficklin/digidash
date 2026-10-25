@@ -1,5 +1,5 @@
 // Re-creates the schema and seed data from db/master_seed.sql.
-// Usage: bun run db:seed   (Bun loads CONNECTION_STRING from .env)
+// Usage: bun run db:seed   (Bun loads DATABASE_URL from .env)
 import fs from 'node:fs';
 import path from 'node:path';
 import pg from 'pg';
@@ -14,7 +14,7 @@ if (!process.versions.bun) {
 }
 
 const sql = fs.readFileSync(path.join(import.meta.dirname, '..', 'db', 'master_seed.sql'), 'utf8');
-const client = new pg.Client({ connectionString: process.env.CONNECTION_STRING });
+const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
 
 try {
   await client.connect();

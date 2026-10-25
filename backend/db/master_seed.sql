@@ -1,7 +1,7 @@
 -- Digidash schema + seed data. Safe to re-run: it drops and recreates both tables
 -- (all existing users and widgets are wiped).
 --
---   bun run db:seed                    (uses CONNECTION_STRING from .env)
+--   bun run db:seed                    (uses DATABASE_URL from .env)
 --   psql -h localhost -U admin -d digidash -f db/master_seed.sql
 --
 -- Dev login (local development only, NOT secure):
