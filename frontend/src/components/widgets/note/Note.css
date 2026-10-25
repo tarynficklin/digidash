@@ -1,40 +1,40 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
 
 .color-picker * {
-	box-sizing: content-box;
-	display: flex;
-	margin: 5px 10px;
-	height: 20px;
-	width: 20px;
-	border-radius: 50%;
-	background: white;
-	transition: .15s;
+  box-sizing: content-box;
+  display: flex;
+  margin: 5px 10px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: 0.15s;
 }
 
 .color-picker *:hover {
-	box-shadow: 0px 0px 0px 3px rgba(255,255,255,.5);
+  box-shadow: 0px 0px 0px 3px rgba(255, 255, 255, 0.5);
 }
 
 .note-area {
-	position: absolute;
-	resize: none;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	width: 100%;
-	height: calc(100% - 42px);
-	border: none;
-	background: rgba(255,255,255,.04);
-	font-weight: 200;
-	font-size: 14px;
-	padding: 20px;
-	color: white;
-	transition: .25s;
-	font-family: 'Noto Sans', sans-serif;
-	letter-spacing: 2px;
+  position: absolute;
+  resize: none;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100% - 42px);
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 200;
+  font-size: 14px;
+  padding: 20px;
+  color: white;
+  transition: 0.25s;
+  font-family: 'Noto Sans', sans-serif;
+  letter-spacing: 2px;
 }
 
 .note-area:focus {
-	background: rgba(255,255,255,.08);
-	outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
 }

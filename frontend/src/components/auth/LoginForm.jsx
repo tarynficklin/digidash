@@ -1,11 +1,13 @@
 // Local login / signup panel (replaces the redirect to Auth0).
 // Not secure by design: development only. The seeded dev account is
 // documented in db/master_seed.sql and the README.
-import React, { useState } from 'react';
+
 import axios from 'axios';
+import React, { useState } from 'react';
 import './LoginForm.css';
 
-const errorMessage = (err) => err.response?.data?.error ?? 'Something went wrong. Is the API server running?';
+const errorMessage = (err) =>
+  err.response?.data?.error ?? 'Something went wrong. Is the API server running?';
 
 export default function LoginForm({ onLoggedIn, onClose }) {
   const [mode, setMode] = useState('login');
@@ -22,7 +24,11 @@ export default function LoginForm({ onLoggedIn, onClose }) {
     setError('');
     try {
       const { data: user } = isSignup
-        ? await axios.post('/api/signup', { username: fields.username, email: fields.email, password: fields.password })
+        ? await axios.post('/api/signup', {
+            username: fields.username,
+            email: fields.email,
+            password: fields.password,
+          })
         : await axios.post('/api/login', { login: fields.login, password: fields.password });
       await onLoggedIn(user);
     } catch (err) {
@@ -44,10 +50,22 @@ export default function LoginForm({ onLoggedIn, onClose }) {
         </button>
 
         <div className="login-tabs" role="tablist">
-          <button type="button" role="tab" aria-selected={!isSignup} className={!isSignup ? 'theme-text' : ''} onClick={() => switchMode('login')}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={!isSignup}
+            className={!isSignup ? 'theme-text' : ''}
+            onClick={() => switchMode('login')}
+          >
             Log in
           </button>
-          <button type="button" role="tab" aria-selected={isSignup} className={isSignup ? 'theme-text' : ''} onClick={() => switchMode('signup')}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={isSignup}
+            className={isSignup ? 'theme-text' : ''}
+            onClick={() => switchMode('signup')}
+          >
             Sign up
           </button>
         </div>
@@ -56,17 +74,37 @@ export default function LoginForm({ onLoggedIn, onClose }) {
           <>
             <label>
               <span>Username</span>
-              <input className="theme-input" value={fields.username} onChange={update('username')} autoComplete="username" autoFocus required />
+              <input
+                className="theme-input"
+                value={fields.username}
+                onChange={update('username')}
+                autoComplete="username"
+                autoFocus
+                required
+              />
             </label>
             <label>
               <span>Email (optional)</span>
-              <input className="theme-input" type="email" value={fields.email} onChange={update('email')} autoComplete="email" />
+              <input
+                className="theme-input"
+                type="email"
+                value={fields.email}
+                onChange={update('email')}
+                autoComplete="email"
+              />
             </label>
           </>
         ) : (
           <label>
             <span>Username or email</span>
-            <input className="theme-input" value={fields.login} onChange={update('login')} autoComplete="username" autoFocus required />
+            <input
+              className="theme-input"
+              value={fields.login}
+              onChange={update('login')}
+              autoComplete="username"
+              autoFocus
+              required
+            />
           </label>
         )}
 
@@ -82,7 +120,11 @@ export default function LoginForm({ onLoggedIn, onClose }) {
           />
         </label>
 
-        {error ? <p className="login-error" role="alert">{error}</p> : null}
+        {error ? (
+          <p className="login-error" role="alert">
+            {error}
+          </p>
+        ) : null}
 
         <button type="submit" className="filled-button theme-color login-submit" disabled={busy}>
           {busy ? '...' : isSignup ? 'Create account' : 'Log in'}

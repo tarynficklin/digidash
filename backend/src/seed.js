@@ -6,7 +6,11 @@ import pg from 'pg';
 import { describeError } from './db.js';
 
 if (!process.versions.bun) {
-  try { process.loadEnvFile(); } catch { /* no .env file; rely on the real environment */ }
+  try {
+    process.loadEnvFile();
+  } catch {
+    /* no .env file; rely on the real environment */
+  }
 }
 
 const sql = fs.readFileSync(path.join(import.meta.dirname, '..', 'db', 'master_seed.sql'), 'utf8');
@@ -16,7 +20,7 @@ try {
   await client.connect();
   await client.query(sql); // no parameters -> simple protocol, multiple statements allowed
   const { rows } = await client.query(
-    'SELECT (SELECT count(*) FROM users)::int AS users, (SELECT count(*) FROM master)::int AS widgets'
+    'SELECT (SELECT count(*) FROM users)::int AS users, (SELECT count(*) FROM master)::int AS widgets',
   );
   console.log(`Seeded digidash: ${rows[0].users} user(s), ${rows[0].widgets} widget(s).`);
 } catch (err) {

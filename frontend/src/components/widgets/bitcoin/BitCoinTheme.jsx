@@ -1,11 +1,11 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-function BitCoinTheme (props) {
-	const {themeColor} = props
-	return (
-		<style>
-			{`
+function BitCoinTheme(props) {
+  const { themeColor } = props;
+  return (
+    <style>
+      {`
 				.linechart_area {fill: rgb(${themeColor})}
 				.linechart_label {fill: rgb(${themeColor}) !important}
 				.linechart_path {stroke: rgb(${themeColor}) !important}
@@ -13,9 +13,11 @@ function BitCoinTheme (props) {
 				.heading {color: rgb(${themeColor})}
 				.subtext {color: rgb(${themeColor})}
 			`}
-		</style>
-	)
+    </style>
+  );
 }
 
-function mapStateToProps (state) {return {themeColor: state.color}};
+function mapStateToProps(state) {
+  return { themeColor: state.color };
+}
 export default connect(mapStateToProps)(BitCoinTheme);

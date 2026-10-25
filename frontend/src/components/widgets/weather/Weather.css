@@ -3,10 +3,10 @@
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
- }
+}
 
 .card {
-  background: rgba(255, 255, 255, .04);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 3px;
   margin: 5px;
   display: flex;
@@ -15,24 +15,24 @@
   flex-direction: column;
   color: white;
   padding: 10px;
-  transition: .25s;
+  transition: 0.25s;
   width: 100px;
 }
 
 .card:hover {
-  background: rgba(255,255,255, .08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .back-button {
   position: absolute;
   top: 10px;
   left: 10px;
-	-webkit-text-stroke: .75px white;
-	color: transparent;
+  -webkit-text-stroke: 0.75px white;
+  color: transparent;
 }
 
 .weather input {
-  background: rgba(255, 255, 255, .05);
+  background: rgba(255, 255, 255, 0.05);
   width: 100%;
   height: 50px;
 }

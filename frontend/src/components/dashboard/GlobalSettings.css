@@ -1,79 +1,79 @@
 .global-settings a {
-	letter-spacing: 3px;
-	animation-delay: 1s;
+  letter-spacing: 3px;
+  animation-delay: 1s;
 }
 
 .global-settings h1 {
-	letter-spacing: 10px;
-	font-weight: 300;
-	display: flex;
-	justify-content: center;
-	opacity: 1;
-	color: white;
-	margin-bottom: 25px;
-	animation-delay: 1s;
+  letter-spacing: 10px;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+  opacity: 1;
+  color: white;
+  margin-bottom: 25px;
+  animation-delay: 1s;
 }
 
 .global-options {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	animation-delay: 1s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  animation-delay: 1s;
 }
 
-.global-main{
-	width: 100%;
-	color:white;
-	display:flex; 
-	justify-content: center;
-	align-items: flex-start;
-	flex-direction: row;
+.global-main {
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
 }
 
-.globalItem{
-	margin:30px;
-	color:white
+.globalItem {
+  margin: 30px;
+  color: white;
 }
-.globalThemes{
-	display:flex;
-	flex-direction:column;
-	justify-content: center;
-	align-items:center;
-	width: 452px;
-	border-right: 1px solid white;
-	padding-bottom: 25px;
+.globalThemes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 452px;
+  border-right: 1px solid white;
+  padding-bottom: 25px;
 }
-.globalLayout{
-	display:flex;
-	flex-direction:column;
-	justify-content: center;
-	align-items: center;
-	width: 450px;
+.globalLayout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 450px;
 }
-.list{
-	display:flex;
-	flex-direction:column;
-	align-items:flex-start;
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.listItem{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding:5px;
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 .listItem button {
-	margin-top: 10px;
-	width: 300px;
+  margin-top: 10px;
+  width: 300px;
 }
 
 .global-settings-wrapper {
-	pointer-events: none;
-	opacity: 0;
-	transition: .5s;
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.5s;
 }
 
 .global-open {
-	pointer-events: auto;
-	opacity: 1;
+  pointer-events: auto;
+  opacity: 1;
 }

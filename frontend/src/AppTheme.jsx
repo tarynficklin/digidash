@@ -2,30 +2,29 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 function AppTheme(props) {
+  const { background, themeColor, flavor, locked } = props;
 
-	const { background, themeColor, flavor, locked } = props
+  const blue = '000, 174, 255',
+    yellow = '255, 255, 000',
+    red = '255, 000, 000',
+    purple = '140, 000, 255',
+    green = '000, 255, 000',
+    orange = '255, 175, 000',
+    pink = '255, 000, 230';
 
-	let blue = '000, 174, 255',
-		yellow = '255, 255, 000',
-		red = '255, 000, 000',
-		purple = '140, 000, 255',
-		green = '000, 255, 000',
-		orange = '255, 175, 000',
-		pink = '255, 000, 230'
-
-	let theme = (widget, color, strength) => {
-		return (`
+  const theme = (widget, color, strength) => {
+    return `
 			.${widget} .theme-text   {color         : rgb(${color})}
 			.${widget} .theme-color  {background    : rgb(${color})}
 			.${widget} .theme-accent {border-bottom : rgb(${color}) 1px solid}
 			.${widget} .theme-glow   {background    : rgb(${color}, ${strength})}
 			.${widget} .theme-input  {border        : rgb(${color}) solid; border-width : 0 0 1px 0;}
-		`)
-	}
+		`;
+  };
 
-	return (
-		<style>
-			{`
+  return (
+    <style>
+      {`
 				#App {
 					background      : linear-gradient(to bottom, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.8) 100%), center fixed url(${background});
 					background-size : cover;
@@ -127,8 +126,9 @@ function AppTheme(props) {
 					font-size: 22px;
 				}
 
-				${flavor === 'classic' ?
-					`
+				${
+          flavor === 'classic'
+            ? `
 					${theme('clock', red, '.15')}
 					${theme('bitcoin', green, '.1 ')}
 					${theme('weather', blue, '.15')}
@@ -149,14 +149,15 @@ function AppTheme(props) {
 					.bitcoin .heading         { color  : rgb(${green}) }
 					.bitcoin .subtext         { color  : rgb(${green}) }
 				`
-					: null}
+            : null
+        }
 			`}
-		</style>
-	)
+    </style>
+  );
 }
 
 function mapStateToProps(state) {
-	const { user_bg, color, flavor, locked } = state;
-	return { background: user_bg, themeColor: color, flavor, locked }
-};
+  const { user_bg, color, flavor, locked } = state;
+  return { background: user_bg, themeColor: color, flavor, locked };
+}
 export default connect(mapStateToProps)(AppTheme);

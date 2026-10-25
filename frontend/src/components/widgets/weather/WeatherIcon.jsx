@@ -18,7 +18,9 @@ const ICONS = {
 };
 
 export default function WeatherIcon({ icon, color = 'white', size = 40 }) {
-  const name = String(icon ?? '').toUpperCase().replace(/-/g, '_');
+  const name = String(icon ?? '')
+    .toUpperCase()
+    .replace(/-/g, '_');
   return (
     <i
       className={`fas ${ICONS[name] ?? 'fa-cloud'}`}

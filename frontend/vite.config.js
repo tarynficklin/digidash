@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 import { apiTarget } from './scripts/api-target.js';
 
 export default defineConfig(({ mode }) => {

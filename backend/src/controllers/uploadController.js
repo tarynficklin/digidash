@@ -14,17 +14,21 @@ const EXTENSIONS = {
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
-export const uploadDir = (root) => path.resolve(process.env.UPLOAD_DIR || path.join(root, 'uploads'));
+export const uploadDir = (root) =>
+  path.resolve(process.env.UPLOAD_DIR || path.join(root, 'uploads'));
 
 export default (dir) => ({
   // POST /api/uploads (multipart, field "file") -> 201 { key, publicUrl }
   create: async (c) => {
     const body = await c.req.parseBody();
     const file = body.file;
-    if (!(file instanceof File)) return c.json({ error: 'Expected a multipart "file" field.' }, 400);
+    if (!(file instanceof File))
+      return c.json({ error: 'Expected a multipart "file" field.' }, 400);
     const extension = EXTENSIONS[file.type];
-    if (!extension) return c.json({ error: 'Only JPEG, PNG, WebP, GIF or AVIF images are allowed.' }, 415);
-    if (file.size > MAX_UPLOAD_BYTES) return c.json({ error: 'Images must be 10 MB or smaller.' }, 413);
+    if (!extension)
+      return c.json({ error: 'Only JPEG, PNG, WebP, GIF or AVIF images are allowed.' }, 415);
+    if (file.size > MAX_UPLOAD_BYTES)
+      return c.json({ error: 'Images must be 10 MB or smaller.' }, 413);
 
     const userId = String(c.get('userId'));
     const key = `${userId}/${crypto.randomUUID()}.${extension}`;

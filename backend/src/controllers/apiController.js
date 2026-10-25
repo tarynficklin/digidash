@@ -25,7 +25,11 @@ const WMO = [
 ];
 
 function describeWeather(code) {
-  const [, icon, summary, precipType] = WMO.find(([codes]) => codes.includes(code)) ?? [null, 'cloudy', 'Cloudy'];
+  const [, icon, summary, precipType] = WMO.find(([codes]) => codes.includes(code)) ?? [
+    null,
+    'cloudy',
+    'Cloudy',
+  ];
   return { icon, summary, precipType };
 }
 
@@ -37,7 +41,12 @@ const htmlToText = (html) =>
   String(html)
     .replace(/<[^>]+>/g, '')
     .replace(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (m, e) =>
-      e[0] === '#' ? String.fromCodePoint(e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : Number(e.slice(1))) : ENTITIES[e.toLowerCase()] ?? m)
+      e[0] === '#'
+        ? String.fromCodePoint(
+            e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : Number(e.slice(1)),
+          )
+        : (ENTITIES[e.toLowerCase()] ?? m),
+    )
     .trim();
 
 class NotFound extends Error {}
@@ -45,7 +54,9 @@ class NotFound extends Error {}
 // Free Dictionary API (dictionaryapi.dev) -> [{ partOfSpeech, definition }]
 async function freeDictionary(word) {
   try {
-    const api = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    const api = await axios.get(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+    );
     return api.data
       .flatMap((entry) => entry.meanings ?? [])
       .filter((m) => m.definitions?.length)
@@ -59,11 +70,17 @@ async function freeDictionary(word) {
 // Wiktionary REST API (Wikimedia) -> [{ partOfSpeech, definition }]
 async function wiktionary(word) {
   try {
-    const api = await axios.get(`https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`, {
-      headers: { 'User-Agent': 'digidash (local development)' },
-    });
+    const api = await axios.get(
+      `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`,
+      {
+        headers: { 'User-Agent': 'digidash (local development)' },
+      },
+    );
     return (api.data.en ?? [])
-      .map((m) => ({ partOfSpeech: m.partOfSpeech.toLowerCase(), definition: htmlToText(m.definitions?.[0]?.definition ?? '') }))
+      .map((m) => ({
+        partOfSpeech: m.partOfSpeech.toLowerCase(),
+        definition: htmlToText(m.definitions?.[0]?.definition ?? ''),
+      }))
       .filter((m) => m.definition);
   } catch (err) {
     if (err?.response?.status === 404) throw new NotFound();
@@ -85,17 +102,23 @@ export default {
   // Oxford Dictionaries v2: results[0].lexicalEntries[].entries[0].senses[0].definitions
   dictionary: async (c) => {
     const { query } = await readJson(c);
-    const word = String(query ?? '').trim().toLowerCase();
+    const word = String(query ?? '')
+      .trim()
+      .toLowerCase();
     if (!word) return c.json({ error: 'Missing query.' }, 400);
     let meanings;
     try {
       meanings = await freeDictionary(word);
     } catch (err) {
-      if (!(err instanceof NotFound)) console.error(`Free Dictionary API failed (${err?.response?.status ?? err?.code}); trying Wiktionary`);
+      if (!(err instanceof NotFound))
+        console.error(
+          `Free Dictionary API failed (${err?.response?.status ?? err?.code}); trying Wiktionary`,
+        );
       try {
         meanings = await wiktionary(word);
       } catch (fallbackErr) {
-        if (fallbackErr instanceof NotFound) return c.json({ error: `No definitions found for "${word}".` }, 404);
+        if (fallbackErr instanceof NotFound)
+          return c.json({ error: `No definitions found for "${word}".` }, 404);
         return upstreamError(c, 'Wiktionary', fallbackErr);
       }
     }
@@ -117,9 +140,14 @@ export default {
           latitude: lat,
           longitude: lng,
           daily: [
-            'weather_code', 'apparent_temperature_max', 'apparent_temperature_min',
-            'precipitation_probability_max', 'wind_speed_10m_max', 'wind_gusts_10m_max',
-            'relative_humidity_2m_mean', 'visibility_mean',
+            'weather_code',
+            'apparent_temperature_max',
+            'apparent_temperature_min',
+            'precipitation_probability_max',
+            'wind_speed_10m_max',
+            'wind_gusts_10m_max',
+            'relative_humidity_2m_mean',
+            'visibility_mean',
           ].join(','),
           temperature_unit: 'fahrenheit',
           wind_speed_unit: 'mph',
@@ -141,10 +169,16 @@ export default {
           humidity: round((d.relative_humidity_2m_mean[i] ?? 0) / 100, 2),
           windSpeed: round(d.wind_speed_10m_max[i], 1),
           windGust: round(d.wind_gusts_10m_max[i], 1),
-          visibility: d.visibility_mean[i] == null ? null : round(d.visibility_mean[i] / 1609.344, 1),
+          visibility:
+            d.visibility_mean[i] == null ? null : round(d.visibility_mean[i] / 1609.344, 1),
         };
       });
-      return c.json({ latitude: api.data.latitude, longitude: api.data.longitude, timezone: api.data.timezone, daily: { data } });
+      return c.json({
+        latitude: api.data.latitude,
+        longitude: api.data.longitude,
+        timezone: api.data.timezone,
+        daily: { data },
+      });
     } catch (err) {
       return upstreamError(c, 'Open-Meteo', err);
     }
@@ -154,7 +188,13 @@ export default {
     const { lat, lng } = await readJson(c);
     try {
       const api = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', {
-        params: { location: `${lat},${lng}`, radius: 1500, type: 'restaurant', keyword: 'cruise', key: REACT_APP_PLACES },
+        params: {
+          location: `${lat},${lng}`,
+          radius: 1500,
+          type: 'restaurant',
+          keyword: 'cruise',
+          key: REACT_APP_PLACES,
+        },
       });
       return c.json(api.data);
     } catch (err) {
@@ -176,14 +216,22 @@ export default {
     const { val1, val2 } = await readJson(c);
     const from = String(val1 ?? '').toUpperCase();
     const to = String(val2 ?? '').toUpperCase();
-    if (!/^[A-Z]{3}$/.test(from) || !/^[A-Z]{3}$/.test(to)) return c.json({ error: 'Expected 3-letter currency codes.' }, 400);
+    if (!/^[A-Z]{3}$/.test(from) || !/^[A-Z]{3}$/.test(to))
+      return c.json({ error: 'Expected 3-letter currency codes.' }, 400);
     const id = `${from}_${to}`;
-    if (from === to) return c.json({ query: { count: 1 }, results: { [id]: { id, fr: from, to, val: 1 } } });
+    if (from === to)
+      return c.json({ query: { count: 1 }, results: { [id]: { id, fr: from, to, val: 1 } } });
     try {
-      const api = await axios.get('https://api.frankfurter.dev/v1/latest', { params: { base: from, symbols: to } });
+      const api = await axios.get('https://api.frankfurter.dev/v1/latest', {
+        params: { base: from, symbols: to },
+      });
       const val = api.data.rates?.[to];
       if (val == null) return c.json({ error: `No rate for ${from} to ${to}.` }, 404);
-      return c.json({ query: { count: 1 }, date: api.data.date, results: { [id]: { id, fr: from, to, val } } });
+      return c.json({
+        query: { count: 1 },
+        date: api.data.date,
+        results: { [id]: { id, fr: from, to, val } },
+      });
     } catch (err) {
       return upstreamError(c, 'Frankfurter', err);
     }

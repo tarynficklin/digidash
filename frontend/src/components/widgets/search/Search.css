@@ -1,60 +1,72 @@
 .search {
-	overflow: hidden;
-	width: 100%;
-	height: 100%;
-	position: relative;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	
-	color: white;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
   overflow: hidden;
   border-radius: 10000px;
-	background: rgba(255,255,255,0.04);
-	box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
-.search button, .search a {width: 60px;}
+.search button,
+.search a {
+  width: 60px;
+}
 .search button {
-	width: 100%;
-	font-weight: 300;
-	font-size: 22px;
-	text-align: left;
-	padding: 0;
-	border-radius: 0;
+  width: 100%;
+  font-weight: 300;
+  font-size: 22px;
+  text-align: left;
+  padding: 0;
+  border-radius: 0;
 }
 
-.search input  {
-	color: white;
-	height: 70%;
-	width: calc(95% - 240px);
-	background: transparent;
+.search input {
+  color: white;
+  height: 70%;
+  width: calc(95% - 240px);
+  background: transparent;
 }
 
-.search input:focus {outline: none;}
+.search input:focus {
+  outline: none;
+}
 
 .search select {
-	width: 180px;
-	border: none;
-	-webkit-appearance: none;
+  width: 180px;
+  border: none;
+  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(./scroll.svg) 95% / 5% no-repeat rgba(255,255,255,.04);
-	padding: 0 25px;
-	font-size: 17px;
-	font-weight: 200;
-	text-transform: uppercase;
-	letter-spacing: 3px;
-	color: white;
+  background: url(./scroll.svg) 95% / 5% no-repeat rgba(255, 255, 255, 0.04);
+  padding: 0 25px;
+  font-size: 17px;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: white;
 }
 
-.search select::-ms-expand {display: none;}
+.search select::-ms-expand {
+  display: none;
+}
 
 .search select:focus {
-	outline: none;
-	background: url(./scroll.svg) 95% / 5% no-repeat rgba(255,255,255,.10);
+  outline: none;
+  background: url(./scroll.svg) 95% / 5% no-repeat rgba(255, 255, 255, 0.1);
 }
 
-.search option {color: black;}
+.search option {
+  color: black;
+}
 
-.search button, .search select, .search a {height: 100%;}
+.search button,
+.search select,
+.search a {
+  height: 100%;
+}

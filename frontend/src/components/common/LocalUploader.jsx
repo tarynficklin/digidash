@@ -1,10 +1,17 @@
 // Uploads an image to the API's local file storage (POST /api/uploads) and replaces
 // the old S3 uploader experiment. Renders a button that opens the file picker, then
 // calls onFinish({ key, publicUrl }) or onError(message).
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
 
-export default function LocalUploader({ accept = 'image/*', className, children = 'Upload', onFinish, onError }) {
+import axios from 'axios';
+import React, { useRef, useState } from 'react';
+
+export default function LocalUploader({
+  accept = 'image/*',
+  className,
+  children = 'Upload',
+  onFinish,
+  onError,
+}) {
   const input = useRef(null);
   const [busy, setBusy] = useState(false);
 
@@ -33,7 +40,12 @@ export default function LocalUploader({ accept = 'image/*', className, children 
         style={{ display: 'none' }}
         onChange={(e) => upload(e.target.files?.[0])}
       />
-      <button type="button" className={className} disabled={busy} onClick={() => input.current?.click()}>
+      <button
+        type="button"
+        className={className}
+        disabled={busy}
+        onClick={() => input.current?.click()}
+      >
         {busy ? 'Uploading…' : children}
       </button>
     </>

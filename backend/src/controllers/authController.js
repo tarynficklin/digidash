@@ -1,9 +1,10 @@
 // Local username/email + password login (replaces the old Auth0 flow).
 // For local development only: no rate limiting, no CSRF protection, and the
 // session is a signed cookie holding the user id (see ../session.js).
+
+import { readJson } from '../http.js';
 import { hashPassword, verifyPassword } from '../passwords.js';
 import { endSession, getSessionUserId, startSession } from '../session.js';
-import { readJson } from '../http.js';
 
 // The account seeded by db/master_seed.sql; used by the dev-only back door.
 export const DEV_USER = 'demo';
@@ -34,14 +35,16 @@ export default {
     const email = text(body.email) || null;
     const password = typeof body.password === 'string' ? body.password : '';
 
-    if (!username || !password) return c.json({ error: 'Username and password are required.' }, 400);
+    if (!username || !password)
+      return c.json({ error: 'Username and password are required.' }, 400);
     if (username.includes('@')) return c.json({ error: 'Usernames cannot contain "@".' }, 400);
 
     let user;
     try {
       [user] = await db.users.create_user([username, email, await hashPassword(password)]);
     } catch (err) {
-      if (err.code === '23505') return c.json({ error: 'That username or email is already taken.' }, 409);
+      if (err.code === '23505')
+        return c.json({ error: 'That username or email is already taken.' }, 409);
       throw err;
     }
 
@@ -55,7 +58,8 @@ export default {
     const login = text(body.login ?? body.username ?? body.email);
     const password = typeof body.password === 'string' ? body.password : '';
 
-    if (!login || !password) return c.json({ error: 'Enter your username (or email) and password.' }, 400);
+    if (!login || !password)
+      return c.json({ error: 'Enter your username (or email) and password.' }, 400);
 
     const [row] = await db.users.find_user([login]);
     if (!row || !(await verifyPassword(password, row.password_hash))) {
@@ -71,7 +75,8 @@ export default {
   devLogin: async (c) => {
     const db = c.get('db');
     const [row] = await db.users.find_user([DEV_USER]);
-    if (!row) return c.json({ error: `Dev user "${DEV_USER}" not found. Run \`bun run db:seed\`.` }, 404);
+    if (!row)
+      return c.json({ error: `Dev user "${DEV_USER}" not found. Run \`bun run db:seed\`.` }, 404);
     await startSession(c, row.user_id);
     return c.redirect('/', 302);
   },
@@ -105,7 +110,15 @@ export default {
   update: async (c) => {
     const db = c.get('db');
     const { user_bg, color, theme, flavor, compact, collision } = await readJson(c);
-    const [user] = await db.users.update_user([user_bg, color, theme, flavor, compact, collision, c.get('userId')]);
+    const [user] = await db.users.update_user([
+      user_bg,
+      color,
+      theme,
+      flavor,
+      compact,
+      collision,
+      c.get('userId'),
+    ]);
     return c.json(user);
   },
 };

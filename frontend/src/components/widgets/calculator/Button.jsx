@@ -26,5 +26,4 @@ Button.defaultProps = {
   onClick: null,
 };
 
-
 export default Button;

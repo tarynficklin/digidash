@@ -1,11 +1,11 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-function GridTheme (props) {
-	const {themeColor} = props
-	return (
-		<style>
-			{`.react-grid-item.react-grid-placeholder {
+function GridTheme(props) {
+  const { themeColor } = props;
+  return (
+    <style>
+      {`.react-grid-item.react-grid-placeholder {
 					background    : rgb(${themeColor});
 					opacity       : .15;
 					border-radius : 3px;
@@ -21,9 +21,11 @@ function GridTheme (props) {
 						z-index: 3;
 				}
 			`}
-		</style>
-	)
+    </style>
+  );
 }
 
-function mapStateToProps (state) {return {themeColor: state.color}};
+function mapStateToProps(state) {
+  return { themeColor: state.color };
+}
 export default connect(mapStateToProps)(GridTheme);

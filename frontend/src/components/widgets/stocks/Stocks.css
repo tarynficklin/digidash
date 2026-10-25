@@ -1,35 +1,35 @@
-.stocks{
-	width:100%;
-	height:100%;
+.stocks {
+  width: 100%;
+  height: 100%;
 }
-.stocks-header{
-	width:100%;
-	height:60px;
-	margin:30px;
-	display:flex;
-	justify-content:center;
-	align-items:center;
-}
-
-.chart-wrapper{
-	height:100%;
-	width:100%;
-	background-color: transparent
+.stocks-header {
+  width: 100%;
+  height: 60px;
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.go-button{
-	color:white
+.chart-wrapper {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
 }
-.inputter{
-	width:75%;
+
+.go-button {
+  color: white;
+}
+.inputter {
+  width: 75%;
 }
 
 .ghost-stock-icon {
-	width: 100%;
-	height: 100%;
-	font-size: 120px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	opacity: .25;
+  width: 100%;
+  height: 100%;
+  font-size: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.25;
 }

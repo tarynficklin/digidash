@@ -13,12 +13,12 @@
 
 .heading {
   font-size: 1.5rem;
-  color: #2196F3;
+  color: #2196f3;
 }
 
 .subtext {
-  color: #64B5F6;
-  font-size:20%;
+  color: #64b5f6;
+  font-size: 20%;
   padding-bottom: 15px;
 }
 
@@ -28,8 +28,8 @@
 
 #middle {
   padding: 0 48px;
-  border-left: 1px solid #DAE1E9;
-  border-right: 1px solid #DAE1E9;
+  border-left: 1px solid #dae1e9;
+  border-right: 1px solid #dae1e9;
 }
 
 #right {

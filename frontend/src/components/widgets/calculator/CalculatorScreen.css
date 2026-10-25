@@ -1,5 +1,5 @@
 .CalculatorScreen {
-  background: rgba(255,255,255, .15);
+  background: rgba(255, 255, 255, 0.15);
   font-size: 18px;
   grid-column-end: span 4;
   margin: 15px 0 5px;

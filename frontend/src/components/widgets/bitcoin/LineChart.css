@@ -2,10 +2,10 @@
   /* padding: 8px; */
   position: absolute;
   bottom: 0;
-  left:0;
+  left: 0;
 
-  height:200px;
-  width:100%;
+  height: 200px;
+  width: 100%;
 }
 .linechart_path {
   stroke-width: 3;
@@ -23,17 +23,17 @@
 
 .linechart_area {
   padding: 8px;
-  fill: #64B5F6;
+  fill: #64b5f6;
   stroke: none;
-  opacity: .4;
+  opacity: 0.4;
 }
 
 .linechart_label {
- fill: #64B5F6;
- font-weight: 700;
+  fill: #64b5f6;
+  font-weight: 700;
 }
 
 .hoverLine {
-  stroke: #7D95B6;
+  stroke: #7d95b6;
   stroke-width: 1;
 }

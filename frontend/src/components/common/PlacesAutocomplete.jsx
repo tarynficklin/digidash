@@ -17,7 +17,9 @@ export function geocodeByAddress(address) {
     const maps = googleMaps();
     if (!maps) return reject(new Error('Google Maps JavaScript API is not loaded.'));
     new maps.Geocoder().geocode({ address }, (results, status) =>
-      status === maps.GeocoderStatus.OK ? resolve(results) : reject(new Error(`Geocoding failed: ${status}`))
+      status === maps.GeocoderStatus.OK
+        ? resolve(results)
+        : reject(new Error(`Geocoding failed: ${status}`)),
     );
   });
 }
@@ -27,7 +29,13 @@ export function getLatLng(result) {
   return Promise.resolve({ lat: location.lat(), lng: location.lng() });
 }
 
-export default function PlacesAutocomplete({ value, onChange, onSelect, debounce = 200, children }) {
+export default function PlacesAutocomplete({
+  value,
+  onChange,
+  onSelect,
+  debounce = 200,
+  children,
+}) {
   const [predictions, setPredictions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
@@ -47,7 +55,8 @@ export default function PlacesAutocomplete({ value, onChange, onSelect, debounce
     clearTimeout(timer.current);
     const maps = googleMaps();
     if (!input || !maps?.places) {
-      if (input && !maps?.places) console.error('PlacesAutocomplete: Google Maps places library is not loaded.');
+      if (input && !maps?.places)
+        console.error('PlacesAutocomplete: Google Maps places library is not loaded.');
       return clear();
     }
     service.current ??= new maps.places.AutocompleteService();
@@ -57,7 +66,9 @@ export default function PlacesAutocomplete({ value, onChange, onSelect, debounce
         setLoading(false);
         setActiveIndex(-1);
         const ok = status === maps.places.PlacesServiceStatus.OK && results;
-        setPredictions(ok ? results.map((p) => ({ description: p.description, placeId: p.place_id })) : []);
+        setPredictions(
+          ok ? results.map((p) => ({ description: p.description, placeId: p.place_id })) : [],
+        );
       });
     }, debounce);
   }
@@ -86,7 +97,11 @@ export default function PlacesAutocomplete({ value, onChange, onSelect, debounce
     }
   }
 
-  const suggestions = predictions.map((p, index) => ({ ...p, index, active: index === activeIndex }));
+  const suggestions = predictions.map((p, index) => ({
+    ...p,
+    index,
+    active: index === activeIndex,
+  }));
 
   const getInputProps = (props = {}) => ({
     ...props,

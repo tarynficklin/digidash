@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import CalculatorScreen from './CalculatorScreen';
-import Button from './Button';
 import {
-  clickNumber,
   clickAllClear,
   clickClearEntry,
+  clickEqual,
+  clickNumber,
   clickOperation,
   clickPercentage,
-  clickEqual,
 } from './actions';
+import Button from './Button';
+import CalculatorScreen from './CalculatorScreen';
 import './Calculator.css';
 
 class Calculator extends Component {
@@ -71,18 +71,16 @@ class Calculator extends Component {
           <Button value="1" onClick={this.handleClickNumber} />
           <Button value="2" onClick={this.handleClickNumber} />
           <Button value="3" onClick={this.handleClickNumber} />
-          <Button
-            className="Button-big"
-            value="+"
-            onClick={this.handleClickOperation}
-          />
+          <Button className="Button-big" value="+" onClick={this.handleClickOperation} />
           <Button value="0" onClick={this.handleClickNumber} />
           <Button value="." onClick={this.handleClickNumber} />
           <Button value="=" onClick={this.handleClickEqual} />
         </div>
-        
+
         <div className="theme-glow"></div>
-        <div className="theme-accent"><i className="fas fa-arrows-alt"></i></div>
+        <div className="theme-accent">
+          <i className="fas fa-arrows-alt"></i>
+        </div>
       </div>
     );
   }

@@ -1,22 +1,16 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "./Note.css";
-import {
-  noteCheck1,
-  noteCheck2,
-  noteCheck3,
-  noteCheck4,
-  noteCheck5,
-} from "../../../logic/logic";
+import axios from 'axios';
+import React, { Component } from 'react';
+import './Note.css';
+import { noteCheck1, noteCheck2, noteCheck3, noteCheck4, noteCheck5 } from '../../../logic/logic';
 
 class Note extends Component {
   constructor(props) {
     const { o1, o2, o3 } = props.o;
     super(props);
     this.state = {
-      selectedFont: o1 ? o1 : "",
-      selectedFontColor: o2 ? o2 : "rgb(255,255,255)",
-      input: o3 ? o3 : "",
+      selectedFont: o1 ? o1 : '',
+      selectedFontColor: o2 ? o2 : 'rgb(255,255,255)',
+      input: o3 ? o3 : '',
       miniSettings: false,
     };
   }
@@ -50,19 +44,13 @@ class Note extends Component {
   render() {
     const { miniSettings } = this.state;
     return (
-      <div
-        className="note standard-widget"
-        style={{ height: "100%", width: "100%" }}
-      >
+      <div className="note standard-widget" style={{ height: '100%', width: '100%' }}>
         {noteCheck1(this.props.x)}
         {noteCheck2(this.props.y)}
         {noteCheck3(this.props.w)}
         {noteCheck4(this.props.h)}
         {noteCheck5(this.props.master_id)}
-        <button
-          className="widget-settings-button"
-          onClick={() => this.toggleSettings()}
-        >
+        <button className="widget-settings-button" onClick={() => this.toggleSettings()}>
           •••
         </button>
 
@@ -71,9 +59,9 @@ class Note extends Component {
             <div
               className="widget-settings"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
             >
               <div className="widget-settings-item">

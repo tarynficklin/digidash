@@ -1,15 +1,13 @@
 .bitcoin {
-  color:white;
+  color: white;
   overflow: hidden;
   position: relative;
-  width:100%;
-  height:100%;
-  padding:15px;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
   border-radius: 3px;
-  background: rgba(255,255,255,.04);
-
+  background: rgba(255, 255, 255, 0.04);
 }
-
 
 .row {
   display: flex;
@@ -34,13 +32,12 @@ h1 {
 
 .popup {
   /* min-height: 20px; */
-  height:20%;
-  width:50%;
+  height: 20%;
+  width: 50%;
 }
 
 .sponsor {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 }

@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900');
-*{box-sizing: border-box}
+* {
+  box-sizing: border-box;
+}
 
 body {
   overflow-x: hidden;
@@ -9,26 +11,36 @@ body {
   font-family: 'Montserrat', sans-serif;
   user-select: none;
   -moz-user-select: none;
-  -khtml-user-select: none;
   -webkit-user-select: none;
   -o-user-select: none;
   overflow: hidden;
   padding-bottom: 130px;
 }
 
-button, input, select {font-family: 'Montserrat', sans-serif; transition: .25s;}
-button, input, select:focus {outline: none;}
+button,
+input,
+select {
+  font-family: 'Montserrat', sans-serif;
+  transition: 0.25s;
+}
+button,
+input,
+select:focus {
+  outline: none;
+}
 
 button {
   border: none;
   text-transform: uppercase;
   font-size: 14px;
   letter-spacing: 3px;
-  opacity: .85; 
-  background: transparent
+  opacity: 0.85;
+  background: transparent;
 }
 
-button:hover {opacity: 1;}
+button:hover {
+  opacity: 1;
+}
 
 button:focus {
   outline: none;
@@ -38,7 +50,7 @@ button:focus {
   color: white;
   padding: 7px 30px;
   border-radius: 50px;
-  background: rgba(255,255,255,.25)
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .standard-widget {
@@ -51,18 +63,18 @@ button:focus {
   align-items: center;
   border-radius: 3px;
   overflow: hidden;
-	background: rgba(255,255,255,0.04);
-	box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
 .widget-settings-button {
   background: transparent;
-	padding: 0;
-	margin: 10px;
-	width: 30px;
-	font-size: 18px;
-	-webkit-text-stroke: .75px white;
-	color: transparent;
+  padding: 0;
+  margin: 10px;
+  width: 30px;
+  font-size: 18px;
+  -webkit-text-stroke: 0.75px white;
+  color: transparent;
   border-radius: 0;
   overflow: hidden;
   position: absolute;
@@ -73,7 +85,6 @@ button:focus {
 
 .widget-settings {
   position: absolute;
-  display: none;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -82,11 +93,11 @@ button:focus {
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  top: 0; 
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 2;
 }
 
@@ -103,37 +114,70 @@ button:focus {
   height: 25px;
   font-size: 14px;
   border-radius: 3px;
-  color: rgba(255,255,255,.3);
-  background: rgba(255,255,255,0.3);
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: .25s;
+  transition: 0.25s;
   margin: 10px;
 }
-.checkbox:hover {color: rgba(255,255,255,.75);}
+.checkbox:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
 
-.checked {color: rgba(255,255,255,1); opacity: .85;}
-.checked:hover {color: rgba(255,255,255,1); opacity: 1;}
+.checked {
+  color: rgba(255, 255, 255, 1);
+  opacity: 0.85;
+}
+.checked:hover {
+  color: rgba(255, 255, 255, 1);
+  opacity: 1;
+}
 
-a, p, h1, h2, h3, h4, h5, h6 {
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding: 0;
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 300;
 }
 
-h1 {font-size: 30px;}
-h2 {font-size: 24px;}
-h3 {font-size: 20px;}
-h4 {font-size: 16px;}
-h5 {font-size: 14px;}
-h6 {font-size: 12px;}
-a, p {
+h1 {
+  font-size: 30px;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 16px;
+}
+h5 {
+  font-size: 14px;
+}
+h6 {
+  font-size: 12px;
+}
+a,
+p {
   font-size: 16px;
   font-weight: 200;
   letter-spacing: 1px;

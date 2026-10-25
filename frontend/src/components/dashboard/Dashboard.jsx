@@ -1,32 +1,32 @@
 //DEPENDENCIES
-import React, { Component } from "react";
+
+import axios from 'axios';
+import React, { Component } from 'react';
 // react-grid-layout 2.x keeps the v1 API (WidthProvider, data-grid) under /legacy
-import RGL, { WidthProvider } from "react-grid-layout/legacy";
-import axios from "axios";
-import LoginForm from "../auth/LoginForm";
+import RGL, { WidthProvider } from 'react-grid-layout/legacy';
+import LoginForm from '../auth/LoginForm';
 
 //STYLING
-import "react-grid-layout/css/styles.css";
-import GridTheme from "./GridTheme";
-import "./Dashboard.css";
-
-//WIDGETS
-import Calculator from "../widgets/calculator/Calculator";
-import Clock from "../widgets/clock/Clock";
-import Currency from "../widgets/currency/Currency";
-import Bitcoin from "../widgets/bitcoin/Bitcoin";
-import Dictionary from "../widgets/dictionary/Dictionary";
-import Favorites from "../widgets/favorites/Favorites";
-import Note from "../widgets/note/Note";
-import Restaurants from "../widgets/restaurants/Restaurants";
-import Search from "../widgets/search/Search";
-import Stocks from "../widgets/stocks/Stocks";
-import Weather from "../widgets/weather/Weather";
-import GlobalSettings from "./GlobalSettings";
+import 'react-grid-layout/css/styles.css';
+import GridTheme from './GridTheme';
+import './Dashboard.css';
 
 //REDUX
-import { connect } from "react-redux";
-import { setUser, setLock, deleteUser } from "../../ducks/reducer";
+import { connect } from 'react-redux';
+import { deleteUser, setLock, setUser } from '../../ducks/reducer';
+import Bitcoin from '../widgets/bitcoin/Bitcoin';
+//WIDGETS
+import Calculator from '../widgets/calculator/Calculator';
+import Clock from '../widgets/clock/Clock';
+import Currency from '../widgets/currency/Currency';
+import Dictionary from '../widgets/dictionary/Dictionary';
+import Favorites from '../widgets/favorites/Favorites';
+import Note from '../widgets/note/Note';
+import Restaurants from '../widgets/restaurants/Restaurants';
+import Search from '../widgets/search/Search';
+import Stocks from '../widgets/stocks/Stocks';
+import Weather from '../widgets/weather/Weather';
+import GlobalSettings from './GlobalSettings';
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -52,7 +52,7 @@ class Dashboard extends Component {
   //restores the logged-in user (express-session cookie) into redux; guests get a 401.
   componentDidMount() {
     axios
-      .get("/api/user-data")
+      .get('/api/user-data')
       .then((response) => this.loadUser(response.data))
       .catch(() => {});
   }
@@ -71,7 +71,7 @@ class Dashboard extends Component {
   }
 
   logout() {
-    axios.get("/api/logout").then(() => {
+    axios.get('/api/logout').then(() => {
       this.props.deleteUser();
       this.setState({ widgets: [], layout: [] });
     });
@@ -88,9 +88,7 @@ class Dashboard extends Component {
   //refreshes all widgets on RGL
   updateWidgets() {
     if (!this.props.user_id) return;
-    axios
-      .get(`/widget/${this.props.user_id}`)
-      .then((res) => this.setState({ widgets: res.data }));
+    axios.get(`/widget/${this.props.user_id}`).then((res) => this.setState({ widgets: res.data }));
   }
 
   //layout business with RGL
@@ -111,8 +109,7 @@ class Dashboard extends Component {
 
   //opens and close the global menu
   globalToggle() {
-    const { user_id, user_bg, color, theme, flavor, compact, collision } =
-      this.props;
+    const { user_id, user_bg, color, theme, flavor, compact, collision } = this.props;
     this.setState({ globalOpen: !this.state.globalOpen });
     axios
       .put(`/api/update/${user_id}`, {
@@ -128,15 +125,15 @@ class Dashboard extends Component {
 
   //Updating layout according to specific user
   updateDB(i) {
-    console.log(i, "this is the Index");
+    console.log(i, 'this is the Index');
     const { layout } = this.state;
-    console.log(layout, "this is the layout");
-    let indexKeys = layout.map((val) => val.i);
-    let layoutKey = indexKeys.indexOf(i.toString());
-    let x = layout[layoutKey].x;
-    let y = layout[layoutKey].y;
-    let h = layout[layoutKey].h;
-    let w = layout[layoutKey].w;
+    console.log(layout, 'this is the layout');
+    const indexKeys = layout.map((val) => val.i);
+    const layoutKey = indexKeys.indexOf(i.toString());
+    const x = layout[layoutKey].x;
+    const y = layout[layoutKey].y;
+    const h = layout[layoutKey].h;
+    const w = layout[layoutKey].w;
     axios.put(`/widget/position/${i}`, { i, x, y, w, h });
   }
 
@@ -144,11 +141,11 @@ class Dashboard extends Component {
   widgetSwitch(val) {
     const { updateWidgets } = this;
 
-    let key = `${val.master_id}`;
+    const key = `${val.master_id}`;
     // let dataGrid = {i: `${val.master_id}`, x: val.x, y: val.y, w: val.w, h: val.h}
 
     switch (val.widget_name) {
-      case "Search":
+      case 'Search':
         return (
           <div
             key={key}
@@ -166,7 +163,7 @@ class Dashboard extends Component {
             <Search o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Dictionary":
+      case 'Dictionary':
         return (
           <div
             key={key}
@@ -184,7 +181,7 @@ class Dashboard extends Component {
             <Dictionary o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Note":
+      case 'Note':
         return (
           <div
             key={key}
@@ -202,7 +199,7 @@ class Dashboard extends Component {
             <Note o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Clock":
+      case 'Clock':
         return (
           <div
             key={key}
@@ -220,7 +217,7 @@ class Dashboard extends Component {
             <Clock o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Weather":
+      case 'Weather':
         return (
           <div
             key={key}
@@ -238,7 +235,7 @@ class Dashboard extends Component {
             <Weather o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Calculator":
+      case 'Calculator':
         return (
           <div
             key={key}
@@ -256,7 +253,7 @@ class Dashboard extends Component {
             <Calculator o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Bitcoin":
+      case 'Bitcoin':
         return (
           <div
             key={key}
@@ -274,7 +271,7 @@ class Dashboard extends Component {
             <Bitcoin o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Favorites":
+      case 'Favorites':
         return (
           <div
             key={key}
@@ -292,7 +289,7 @@ class Dashboard extends Component {
             <Favorites o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Currency":
+      case 'Currency':
         return (
           <div
             key={key}
@@ -310,7 +307,7 @@ class Dashboard extends Component {
             <Currency o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Stocks":
+      case 'Stocks':
         return (
           <div
             key={key}
@@ -328,7 +325,7 @@ class Dashboard extends Component {
             <Stocks o={val} updateWidgets={updateWidgets} />
           </div>
         );
-      case "Restaurants":
+      case 'Restaurants':
         return (
           <div
             key={key}
@@ -347,37 +344,37 @@ class Dashboard extends Component {
           </div>
         );
       default:
-        return "defaulted";
+        return 'defaulted';
     }
   }
 
   //Renders a specific icon in the toolbar based on which widget it is
   toolbarSwitch(val) {
     switch (val.widget_name) {
-      case "Search":
+      case 'Search':
         return <i className="fas fa-search"></i>;
-      case "Dictionary":
+      case 'Dictionary':
         return <i className="fas fa-book-open"></i>;
-      case "Note":
+      case 'Note':
         return <i className="fas fa-sticky-note"></i>;
-      case "Clock":
+      case 'Clock':
         return <i className="fas fa-clock"></i>;
-      case "Weather":
+      case 'Weather':
         return <i className="fas fa-cloud"></i>;
-      case "Calculator":
+      case 'Calculator':
         return <i className="fas fa-calculator"></i>;
-      case "Bitcoin":
+      case 'Bitcoin':
         return <i className="fab fa-btc"></i>;
-      case "Favorites":
+      case 'Favorites':
         return <i className="fas fa-star"></i>;
-      case "Currency":
+      case 'Currency':
         return <i className="fas fa-money-check-alt"></i>;
-      case "Stocks":
+      case 'Stocks':
         return <i className="fas fa-chart-line"></i>;
-      case "Restaurants":
+      case 'Restaurants':
         return <i className="fas fa-utensils"></i>;
       default:
-        return "defaulted";
+        return 'defaulted';
     }
   }
 
@@ -418,7 +415,7 @@ class Dashboard extends Component {
       <div>
         {/* HEADER */}
         <div className="header">
-          <div className="user-info">{user_name.replace(/\s/g, " | ")}</div>
+          <div className="user-info">{user_name.replace(/\s/g, ' | ')}</div>
           <div className="user-controls">
             {user_id ? (
               <div>
@@ -428,15 +425,8 @@ class Dashboard extends Component {
                   <i className="fas fa-user-times"></i>
                 </button>
                 <a>|</a>
-                <button
-                  onClick={() => this.lockToggle()}
-                  className="theme-color"
-                >
-                  {!locked ? (
-                    <i className="fas fa-lock"></i>
-                  ) : (
-                    <i className="fas fa-lock-open"></i>
-                  )}
+                <button onClick={() => this.lockToggle()} className="theme-color">
+                  {!locked ? <i className="fas fa-lock"></i> : <i className="fas fa-lock-open"></i>}
                 </button>
               </div>
             ) : (
@@ -459,10 +449,7 @@ class Dashboard extends Component {
         ) : null}
 
         {/* GLOBAL SETTINGS */}
-        <GlobalSettings
-          globalOpen={globalOpen}
-          globalToggle={this.globalToggle}
-        />
+        <GlobalSettings globalOpen={globalOpen} globalToggle={this.globalToggle} />
 
         {/* REACT GRID */}
         <GridTheme />
@@ -477,16 +464,13 @@ class Dashboard extends Component {
           onLayoutChange={this.onLayoutChange}
           isDraggable={locked}
           isResizable={locked}
-          compactType={compact ? "vertical" : null}
+          compactType={compact ? 'vertical' : null}
           preventCollision={collision}
         >
           {user_id ? (
             this.state.widgets.map((val) => this.widgetSwitch(val))
           ) : (
-            <div
-              key={0}
-              data-grid={{ i: `0`, x: 9, y: 4, w: 18, h: 4, minH: 4, minW: 12 }}
-            >
+            <div key={0} data-grid={{ i: `0`, x: 9, y: 4, w: 18, h: 4, minH: 4, minW: 12 }}>
               <Search />
             </div>
           )}
@@ -510,31 +494,28 @@ class Dashboard extends Component {
         >
           <div className="drawer">
             {/* Widget Name, Heigth, Width, Icon, o1, o2, o3, o4, o5, o6 */}
-            {this.drawerItem("Search", 26, 4, "fas fa-search")}
-            {this.drawerItem("Weather", 10, 10, "fas fa-cloud")}
-            {this.drawerItem("Dictionary", 10, 10, "fas fa-book-open")}
-            {this.drawerItem("Clock", 5, 11, "fas fa-clock", "true")}
-            {this.drawerItem("Note", 5, 18, "fas fa-sticky-note")}
-            {this.drawerItem("Calculator", 5, 18, "fas fa-calculator")}
-            {this.drawerItem("Bitcoin", 15, 22, "fab fa-btc")}
-            {this.drawerItem("Favorites", 6, 8, "fas fa-star")}
-            {this.drawerItem("Currency", 6, 8, "fas fa-money-check-alt")}
-            {this.drawerItem("Stocks", 10, 12, "fas fa-chart-line")}
-            {this.drawerItem("Restaurants", 10, 12, "fas fa-utensils")}
+            {this.drawerItem('Search', 26, 4, 'fas fa-search')}
+            {this.drawerItem('Weather', 10, 10, 'fas fa-cloud')}
+            {this.drawerItem('Dictionary', 10, 10, 'fas fa-book-open')}
+            {this.drawerItem('Clock', 5, 11, 'fas fa-clock', 'true')}
+            {this.drawerItem('Note', 5, 18, 'fas fa-sticky-note')}
+            {this.drawerItem('Calculator', 5, 18, 'fas fa-calculator')}
+            {this.drawerItem('Bitcoin', 15, 22, 'fab fa-btc')}
+            {this.drawerItem('Favorites', 6, 8, 'fas fa-star')}
+            {this.drawerItem('Currency', 6, 8, 'fas fa-money-check-alt')}
+            {this.drawerItem('Stocks', 10, 12, 'fas fa-chart-line')}
+            {this.drawerItem('Restaurants', 10, 12, 'fas fa-utensils')}
           </div>
           <div className="drawer-background"></div>
         </div>
 
         {/* TOOLBAR */}
-        <div className={this.state.locked ? "toolbar toolbar-open" : "toolbar"}>
-          <div style={{ display: "flex" }}>
+        <div className={this.state.locked ? 'toolbar toolbar-open' : 'toolbar'}>
+          <div style={{ display: 'flex' }}>
             {this.state.widgets
               ? this.state.widgets.map((val) => {
                   return (
-                    <div
-                      style={{ fontSize: "30px", margin: "0 10px" }}
-                      key={val.master_id}
-                    >
+                    <div style={{ fontSize: '30px', margin: '0 10px' }} key={val.master_id}>
                       <div className="toolbar-icon">
                         {this.toolbarSwitch(val)}
                         {this.state.deleteMode ? (
@@ -555,11 +536,7 @@ class Dashboard extends Component {
             <button onClick={() => this.toggleDeleteMode()}>
               <i className="fas fa-trash-alt"></i>
             </button>
-            <button
-              onClick={() =>
-                this.setState({ drawerOpen: !this.state.drawerOpen })
-              }
-            >
+            <button onClick={() => this.setState({ drawerOpen: !this.state.drawerOpen })}>
               {this.state.drawerOpen ? (
                 <i className="fas fa-minus-square"></i>
               ) : (
@@ -574,16 +551,7 @@ class Dashboard extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    user_id,
-    user_name,
-    user_bg,
-    color,
-    theme,
-    flavor,
-    compact,
-    collision,
-  } = state;
+  const { user_id, user_name, user_bg, color, theme, flavor, compact, collision } = state;
   return {
     user_id,
     user_name,
@@ -595,6 +563,4 @@ function mapStateToProps(state) {
     collision,
   };
 }
-export default connect(mapStateToProps, { setUser, setLock, deleteUser })(
-  Dashboard
-);
+export default connect(mapStateToProps, { setUser, setLock, deleteUser })(Dashboard);

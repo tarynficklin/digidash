@@ -1,53 +1,53 @@
 .dictionary {
-	display: flex;
-	justify-content: flex-start;
-	align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .dictionary-head {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  padding: 15px 20px;
 }
 
 .dictionary-empty {
-	position: absolute;
-	padding-top: 40px;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: rgba(255,255,255, .25);
-	font-style: italic;
-	pointer-events: none;
+  position: absolute;
+  padding-top: 40px;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.25);
+  font-style: italic;
+  pointer-events: none;
 }
 
 .dictionary-head input {
-	padding: 5px;
-	letter-spacing: 5px;
-	text-transform: uppercase;
-	font-size: 14px;
-	width: calc(100% - 80px);
+  padding: 5px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 14px;
+  width: calc(100% - 80px);
 }
 
 .dictionary-head button {
-	width: 80px;
-	color: white;
+  width: 80px;
+  color: white;
 }
 
 .dictionary-body {
-	width: 100%;
-	padding: 10px;
-	margin-top: 50px;
-	user-select: text;
+  width: 100%;
+  padding: 10px;
+  margin-top: 50px;
+  user-select: text;
 }
 
 .dictionary-result {
-	padding: 10px;
+  padding: 10px;
 }

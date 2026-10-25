@@ -1,21 +1,20 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "./Bgp.css";
-import { connect } from "react-redux";
-import { setTheme, setColor, setBG } from "../../ducks/reducer";
-import { Scrollbars } from "../common/Scrollbars";
-import LocalUploader from "../common/LocalUploader";
-import { getPalette } from "../../lib/palette";
+import axios from 'axios';
+import React, { Component } from 'react';
+import './Bgp.css';
+import { connect } from 'react-redux';
+import { setBG, setColor, setTheme } from '../../ducks/reducer';
+import { getPalette } from '../../lib/palette';
+import LocalUploader from '../common/LocalUploader';
+import { Scrollbars } from '../common/Scrollbars';
 
 // Unsplash serves resized copies via query params; uploaded files are used as-is.
-const sized = (url, params) =>
-  url.includes("images.unsplash.com") ? `${url}&${params}` : url;
+const sized = (url, params) => (url.includes('images.unsplash.com') ? `${url}&${params}` : url);
 
 class Bgp extends Component {
   constructor() {
     super();
     this.state = {
-      input: "",
+      input: '',
       imgs: [],
       showBig: false,
       selected: null,
@@ -39,7 +38,7 @@ class Bgp extends Component {
 
   keyPress(e) {
     if (e.keyCode === 13) {
-      document.getElementById("searchButton").click();
+      document.getElementById('searchButton').click();
     }
   }
 
@@ -47,13 +46,13 @@ class Bgp extends Component {
     const REACT_APP_UNSPLASH = import.meta.env.REACT_APP_UNSPLASH;
     axios
       .get(
-        `https://api.unsplash.com/search/photos/?page=1&per_page=40&query=${query}&client_id=${REACT_APP_UNSPLASH}`
+        `https://api.unsplash.com/search/photos/?page=1&per_page=40&query=${query}&client_id=${REACT_APP_UNSPLASH}`,
       )
       .then((res) => {
         this.setState({ imgs: res.data.results });
       })
       .catch((err) => {
-        console.log("Error happened during fetching!", err);
+        console.log('Error happened during fetching!', err);
       });
   };
 
@@ -70,16 +69,19 @@ class Bgp extends Component {
   bigPicture(index, image) {
     this.setState({ showBig: true, selected: index, image });
     // Palette is computed in the browser now (was PUT /api/vibrant).
-    getPalette(sized(image, "auto=format&fit=crop&w=200&q=80"))
+    getPalette(sized(image, 'auto=format&fit=crop&w=200&q=80'))
       .then((vibrant) => this.setState({ vibrant }))
-      .catch((err) => console.log("Could not read colors from image", err));
+      .catch((err) => console.log('Could not read colors from image', err));
   }
 
   // An uploaded file joins the thumbnails (same shape as an Unsplash result) and
   // opens in the preview, so it goes through the usual palette + Finalize flow.
   useUpload = ({ publicUrl }) => {
     const item = { urls: { raw: publicUrl, regular: publicUrl, small: publicUrl } };
-    this.setState((state) => ({ imgs: [item, ...state.imgs] }), () => this.bigPicture(0, publicUrl));
+    this.setState(
+      (state) => ({ imgs: [item, ...state.imgs] }),
+      () => this.bigPicture(0, publicUrl),
+    );
   };
 
   chooseColor(color, theme) {
@@ -89,7 +91,7 @@ class Bgp extends Component {
   changeTheme() {
     const { user_id, setTheme, setColor, setBG } = this.props;
     const { image, color, theme } = this.state;
-    let newImage = sized(image, "auto=format&fit=crop&w=1920&q=80");
+    const newImage = sized(image, 'auto=format&fit=crop&w=1920&q=80');
     setTheme(theme);
     setColor(color);
     setBG(image);
@@ -100,16 +102,12 @@ class Bgp extends Component {
 
   render() {
     const { color } = this.state;
-    const { vibrant, muted, lightVibrant, lightMuted, darkVibrant, darkMuted } =
-      this.state.vibrant;
+    const { vibrant, muted, lightVibrant, lightMuted, darkVibrant, darkMuted } = this.state.vibrant;
     return (
       <div className="bgp">
         {!this.state.showBig ? (
           <div className="header-wrapper">
-            <div
-              className="bgp-back"
-              onClick={() => this.props.bgPickerToggle()}
-            >
+            <div className="bgp-back" onClick={() => this.props.bgPickerToggle()}>
               <i className="fas fa-caret-left"></i>
               <a>Back</a>
             </div>
@@ -125,7 +123,7 @@ class Bgp extends Component {
               </button>
               <LocalUploader
                 onFinish={this.useUpload}
-                onError={(message) => console.log("Upload failed:", message)}
+                onError={(message) => console.log('Upload failed:', message)}
               >
                 <i className="fas fa-upload"></i>
               </LocalUploader>
@@ -143,9 +141,7 @@ class Bgp extends Component {
                 </div>
                 <div
                   style={{
-                    background: `url(${
-                      this.state.imgs[this.state.selected].urls.regular
-                    }) center`,
+                    background: `url(${this.state.imgs[this.state.selected].urls.regular}) center`,
                     backgroundSize: `cover`,
                     borderRadius: `3px`,
                     height: `50%`,
@@ -155,37 +151,37 @@ class Bgp extends Component {
                 <div className="vibrant-picker">
                   {vibrant ? (
                     <div
-                      onClick={() => this.chooseColor(vibrant, "dark")}
+                      onClick={() => this.chooseColor(vibrant, 'dark')}
                       style={{ background: `rgba(${vibrant})` }}
                     ></div>
                   ) : null}
                   {muted ? (
                     <div
-                      onClick={() => this.chooseColor(muted, "dark")}
+                      onClick={() => this.chooseColor(muted, 'dark')}
                       style={{ background: `rgba(${muted})` }}
                     ></div>
                   ) : null}
                   {lightVibrant ? (
                     <div
-                      onClick={() => this.chooseColor(lightVibrant, "dark")}
+                      onClick={() => this.chooseColor(lightVibrant, 'dark')}
                       style={{ background: `rgba(${lightVibrant})` }}
                     ></div>
                   ) : null}
                   {lightMuted ? (
                     <div
-                      onClick={() => this.chooseColor(lightMuted, "dark")}
+                      onClick={() => this.chooseColor(lightMuted, 'dark')}
                       style={{ background: `rgba(${lightMuted})` }}
                     ></div>
                   ) : null}
                   {darkVibrant ? (
                     <div
-                      onClick={() => this.chooseColor(darkVibrant, "light")}
+                      onClick={() => this.chooseColor(darkVibrant, 'light')}
                       style={{ background: `rgba(${darkVibrant})` }}
                     ></div>
                   ) : null}
                   {darkMuted ? (
                     <div
-                      onClick={() => this.chooseColor(darkMuted, "light")}
+                      onClick={() => this.chooseColor(darkMuted, 'light')}
                       style={{ background: `rgba(${darkMuted})` }}
                     ></div>
                   ) : null}
@@ -205,18 +201,13 @@ class Bgp extends Component {
             ) : null
           ) : this.state.imgs ? (
             <div className="overall-wrapper" style={{ width: `100%` }}>
-              <Scrollbars
-                style={{ height: `100%`, width: `100%` }}
-                className="thumbnail-wrapper"
-              >
+              <Scrollbars style={{ height: `100%`, width: `100%` }} className="thumbnail-wrapper">
                 <div className="thumbnail-wrapper" style={{ width: `100%` }}>
                   {this.state.imgs.map((val, i) => {
                     return (
                       <div
                         className="map-item"
-                        onClick={() =>
-                          this.bigPicture(i, this.state.imgs[i].urls.raw)
-                        }
+                        onClick={() => this.bigPicture(i, this.state.imgs[i].urls.raw)}
                         key={i}
                         style={{
                           background: `url(${val.urls.small}) center`,

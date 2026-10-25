@@ -11,7 +11,9 @@ import pg from 'pg';
 
 // Connection failures can be AggregateErrors (one per address tried) with an empty message.
 export function describeError(err) {
-  const inner = Array.isArray(err?.errors) ? err.errors.map((e) => e.message || e.code).filter(Boolean) : [];
+  const inner = Array.isArray(err?.errors)
+    ? err.errors.map((e) => e.message || e.code).filter(Boolean)
+    : [];
   return err?.message || inner.join('; ') || err?.code || String(err);
 }
 
@@ -30,7 +32,8 @@ export function connect(connectionString, scriptsDir) {
 
   for (const dir of fs.readdirSync(scriptsDir, { withFileTypes: true })) {
     if (!dir.isDirectory()) continue;
-    const namespace = (db[dir.name] = {});
+    const namespace = {};
+    db[dir.name] = namespace;
     for (const file of fs.readdirSync(path.join(scriptsDir, dir.name))) {
       if (!file.endsWith('.sql')) continue;
       const sql = fs.readFileSync(path.join(scriptsDir, dir.name, file), 'utf8');

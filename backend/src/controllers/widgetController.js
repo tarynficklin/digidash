@@ -4,7 +4,8 @@ import { readJson } from '../http.js';
 
 const isId = (value) => /^\d+$/.test(String(value));
 const badId = (c) => c.json({ error: 'Invalid widget id.' }, 400);
-const found = (c, widget) => (widget ? c.json(widget) : c.json({ error: 'Widget not found.' }, 404));
+const found = (c, widget) =>
+  widget ? c.json(widget) : c.json({ error: 'Widget not found.' }, 404);
 
 export default {
   read: async (c) => {
@@ -15,7 +16,20 @@ export default {
   create: async (c) => {
     const db = c.get('db');
     const { widget_name, x, y, w, h, o1, o2, o3, o4, o5, o6 } = await readJson(c);
-    const [widget] = await db.widgets.create_widget([c.get('userId'), widget_name, x, y, w, h, o1, o2, o3, o4, o5, o6]);
+    const [widget] = await db.widgets.create_widget([
+      c.get('userId'),
+      widget_name,
+      x,
+      y,
+      w,
+      h,
+      o1,
+      o2,
+      o3,
+      o4,
+      o5,
+      o6,
+    ]);
     return c.json(widget);
   },
 
@@ -33,7 +47,16 @@ export default {
     const masterId = c.req.param('master_id');
     if (!isId(masterId)) return badId(c);
     const { o1, o2, o3, o4, o5, o6 } = await readJson(c);
-    const [widget] = await db.widgets.widget_settings([o1, o2, o3, o4, o5, o6, masterId, c.get('userId')]);
+    const [widget] = await db.widgets.widget_settings([
+      o1,
+      o2,
+      o3,
+      o4,
+      o5,
+      o6,
+      masterId,
+      c.get('userId'),
+    ]);
     return found(c, widget);
   },
 

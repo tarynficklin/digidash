@@ -1,70 +1,73 @@
-
 .header {
-	height: 50px;
-	color: white;
-	padding: 0;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	text-transform: uppercase;
-	letter-spacing: 3px;
-	font-weight: 200;
-	z-index: 5;
-	width: 100%;
-	position: relative;
+  height: 50px;
+  color: white;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 200;
+  z-index: 5;
+  width: 100%;
+  position: relative;
 }
 
-.user-info {padding-left: 25px;}
+.user-info {
+  padding-left: 25px;
+}
 
 .header button {
-	background: transparent;
-	padding: 0;
-	margin: 10px;
-	text-align: left;
-	width: 30px;
-	font-size: 18px;
-	-webkit-text-stroke: .75px white;
-	color: transparent;
-	border-radius: 0;
+  background: transparent;
+  padding: 0;
+  margin: 10px;
+  text-align: left;
+  width: 30px;
+  font-size: 18px;
+  -webkit-text-stroke: 0.75px white;
+  color: transparent;
+  border-radius: 0;
 }
 
 .drawer {
   display: flex;
   align-items: flex-start;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	width: 100vw;
-  transition: .25s;
-	z-index: 6;
-	color: white;
-	position: fixed;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100vw;
+  transition: 0.25s;
+  z-index: 6;
+  color: white;
+  position: fixed;
 }
 
 .drawer div {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 15px;
-	margin: 0;
-	text-transform: uppercase;
-	opacity: .75;
-	transition: .25s
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  margin: 0;
+  text-transform: uppercase;
+  opacity: 0.75;
+  transition: 0.25s;
 }
 
-.drawer div:hover {opacity: 1}
+.drawer div:hover {
+  opacity: 1;
+}
 
 .drawer i {
-	font-size: 60px;
-	padding: 35px;
-	-webkit-text-stroke: .75px white;
-	color: transparent;
+  font-size: 60px;
+  padding: 35px;
+  -webkit-text-stroke: 0.75px white;
+  color: transparent;
 }
 
 .drawer a {
-	font-size: 12px;
-	letter-spacing: 4px;
+  font-size: 12px;
+  letter-spacing: 4px;
 }
 
 /* .layout {
@@ -77,57 +80,70 @@
   bottom: -75px;
   width: 100vw;
   height: 75px;
-  background: rgba(0,0,0,0.5);
-  border-top: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-  transition: .25s;
-	z-index: 5;
-	color: rgba(255,255,255,0.5);
-	overflow-y: hidden;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.25s;
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.5);
+  overflow-y: hidden;
 }
 
-.toolbar-controls button {margin-left: 10px;}
-.toolbar-icon {margin-right: 10px;}
+.toolbar-controls button {
+  margin-left: 10px;
+}
+.toolbar-icon {
+  margin-right: 10px;
+}
 
-.toolbar-open {bottom: 0;}
+.toolbar-open {
+  bottom: 0;
+}
 
-.toolbar button {font-size: 40px; opacity: .5; color: white;}
-.toolbar button:hover {font-size: 40px; opacity: .85;}
+.toolbar button {
+  font-size: 40px;
+  opacity: 0.5;
+  color: white;
+}
+.toolbar button:hover {
+  font-size: 40px;
+  opacity: 0.85;
+}
 
 .delete-button {
-	position: relative;
-	height: 0px;
-	width: 0px;
-	bottom: 17px;
-	right: 5px;
-	margin-right: -12px;
-	padding-bottom: -17px;
-	font-size: 16px;
-	color: rgba(255, 255, 255, .85);
-	transition: .25s;
+  position: relative;
+  height: 0px;
+  width: 0px;
+  bottom: 17px;
+  right: 5px;
+  margin-right: -12px;
+  padding-bottom: -17px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: 0.25s;
 }
 
 .delete-button:hover {
-	color: rgba(255, 0, 0, 1);
+  color: rgba(255, 0, 0, 1);
 }
 
 .login-button {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .login-button button {
-	width: auto;
-	height: auto;
+  width: auto;
+  height: auto;
 }
 
 .login-button a {
-	padding: 0 15px;
-	font-weight: 200;
-	letter-spacing: 5px;
-	font-size: 14px;
+  padding: 0 15px;
+  font-weight: 200;
+  letter-spacing: 5px;
+  font-size: 14px;
 }
