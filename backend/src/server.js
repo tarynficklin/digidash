@@ -14,8 +14,8 @@ import widgetController from './controllers/widgetController.js';
 import { connect, describeError } from './db.js';
 
 //SERVER SETUP
-const { SERVER_PORT, CONNECTION_STRING, NODE_ENV } = process.env;
-const port = Number(SERVER_PORT) || 4040;
+const { PORT, CONNECTION_STRING, NODE_ENV } = process.env;
+const port = Number(PORT) || 4040;
 const isProduction = NODE_ENV === 'production';
 const root = path.join(import.meta.dirname, '..');
 

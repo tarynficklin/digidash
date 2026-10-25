@@ -23,12 +23,12 @@ bun run db:seed      # (re)creates the tables from backend/db/master_seed.sql. W
 
 `bunfig.toml` sets a supply-chain cooldown: `bun install`/`bun add` never pick package versions published in the last 7 days.
 
-Configuration lives in `backend/.env`, plus an optional `frontend/.env` for the two browser keys below (Bun and Vite load them automatically; variables already set in your shell win):
+Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's `PORT` (default 3101), `VITE_API_URL` (the API it proxies to) and the two browser keys below (Bun and Vite load them automatically; variables already set in your shell win):
 
 | Variable | Used by |
 | --- | --- |
 | `CONNECTION_STRING` | API: Postgres connection URL |
-| `SERVER_PORT` | API port (default 4040); the Vite proxy follows it |
+| `PORT` | API port (default 4040); `frontend/.env`'s `VITE_API_URL` points the Vite proxy here |
 | `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
 | `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |
 | `UNSPLASH_KEY` | API: the background picker's Unsplash search (`GET /api/unsplash/search`), so the key stays on the server |
@@ -52,8 +52,8 @@ bun run test            # unit tests (bun:test)
 bun run lint            # Biome (also the pre-commit hook)
 ```
 
-In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api`, `/widget` and `/uploads` to the API on `SERVER_PORT`, read from `backend/.env`.
-To move the API for a session, `SERVER_PORT=6104 bun run dev`; the proxy follows.
+In development, open http://localhost:3101 (digidash's fixed dev port, so the other legacy apps can run at the same time). Vite proxies `/api`, `/widget` and `/uploads` to `VITE_API_URL` (or the backend's `PORT`).
+To move the API, change `backend/.env`'s `PORT` and `frontend/.env`'s `VITE_API_URL` together. A `PORT` set in the shell would reach both workspaces, so set ports in the `.env` files.
 
 ## Login
 

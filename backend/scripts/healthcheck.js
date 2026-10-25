@@ -1,7 +1,7 @@
 // Healthcheck probe: hits the backend's /health and exits 0 when it reports ok, 1 otherwise.
 // Uses only the built-in fetch.
 //   bun backend/scripts/healthcheck.js
-const port = process.env.SERVER_PORT ?? '4040';
+const port = process.env.PORT ?? '4040';
 const url = `http://localhost:${port}/health`;
 
 try {

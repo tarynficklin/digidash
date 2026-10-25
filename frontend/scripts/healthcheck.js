@@ -1,6 +1,6 @@
 // Healthcheck probe for the Vite preview server (`bun run start:frontend`): fetches / and
 // exits 0 on a 2xx response, 1 otherwise. Uses only the built-in fetch.
-//   bun frontend/scripts/healthcheck.js
+//   bun run health:frontend (from the repo root; it runs here so Bun loads this folder's .env)
 const port = process.env.PORT ?? '3101';
 const url = `http://localhost:${port}/`;
 

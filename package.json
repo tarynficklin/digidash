@@ -17,7 +17,7 @@
     "start:frontend": "turbo run preview --filter=@digidash/frontend",
     "start:backend": "turbo run start --filter=@digidash/backend",
     "health:backend": "bun --cwd backend scripts/healthcheck.js",
-    "health:frontend": "bun frontend/scripts/healthcheck.js",
+    "health:frontend": "bun --cwd frontend scripts/healthcheck.js",
     "prepare": "husky"
   },
   "devDependencies": {
