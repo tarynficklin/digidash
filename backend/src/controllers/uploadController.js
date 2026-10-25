@@ -1,6 +1,6 @@
-// Local file storage for user uploads (replaces the S3 uploader experiment). Files are
-// written to UPLOAD_DIR (default: backend/uploads) under the uploader's user id and
-// served back at /uploads/<user_id>/<file>.
+// Local file storage for user uploads (replaces the S3 uploader experiment). Files live in the
+// app's data folder, DATA_PATH (e.g. E:/Documents/Sites/digidash), as in the lockwood apps:
+// <DATA_PATH>/uploads/backgrounds/<user_id>/<file>, served back at /uploads/backgrounds/....
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -14,8 +14,16 @@ const EXTENSIONS = {
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
-export const uploadDir = (root) =>
-  path.resolve(process.env.UPLOAD_DIR || path.join(root, 'uploads'));
+export const dataPath = () => {
+  if (!process.env.DATA_PATH)
+    throw new Error("DATA_PATH is not set: point it at the app's data folder in backend/.env");
+  return path.resolve(process.env.DATA_PATH);
+};
+
+export const uploadDir = () => path.join(dataPath(), 'uploads');
+
+// The uploads' folder under uploadDir(): the background picker is the only uploader.
+const BACKGROUNDS = 'backgrounds';
 
 export default (dir) => ({
   // POST /api/uploads (multipart, field "file") -> 201 { key, publicUrl }
@@ -31,8 +39,8 @@ export default (dir) => ({
       return c.json({ error: 'Images must be 10 MB or smaller.' }, 413);
 
     const userId = String(c.get('userId'));
-    const key = `${userId}/${crypto.randomUUID()}.${extension}`;
-    await mkdir(path.join(dir, userId), { recursive: true });
+    const key = `${BACKGROUNDS}/${userId}/${crypto.randomUUID()}.${extension}`;
+    await mkdir(path.join(dir, BACKGROUNDS, userId), { recursive: true });
     await Bun.write(path.join(dir, key), file);
     return c.json({ key, publicUrl: `/uploads/${key}` }, 201);
   },

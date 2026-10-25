@@ -35,7 +35,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the browser's `R
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
 | `REACT_APP_GOOGLE` | browser: Restaurants map (the Places script tag in `index.html` has its own key) |
 | `REACT_APP_PLACES` | API: Restaurants widget (Google Places) |
-| `UPLOAD_DIR` | API: where uploaded images are stored (default `backend/uploads`, gitignored) |
+| `DATA_PATH` | API (required): the app's data folder, e.g. `E:/Documents/Sites/digidash`. Uploaded images go to `<DATA_PATH>/uploads/backgrounds` |
 
 `REACT_APP_*` names are kept from the Create React App days: Vite exposes them to the browser as `import.meta.env.REACT_APP_*` (`envPrefix` in `frontend/vite.config.js`).
 No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, `CLIENT_SECRET`), the Oxford Dictionaries keys
@@ -96,7 +96,7 @@ when their keys aren't set. The API returns `502` with a short message when an u
 ## Uploads (local file storage)
 
 The S3 uploader experiment is replaced by local file storage. `POST /api/uploads` (multipart field `file`; JPEG, PNG, WebP,
-GIF or AVIF up to 10 MB; requires a session) saves the image to `UPLOAD_DIR/<user_id>/<uuid>.<ext>` and returns
+GIF or AVIF up to 10 MB; requires a session) saves the image to `<DATA_PATH>/uploads/backgrounds/<user_id>/<uuid>.<ext>` and returns
 `{ key, publicUrl }`; files are served at `/uploads/...`. The background picker's upload button uses it
 (`frontend/src/components/common/LocalUploader.jsx`), so you can use your own image as the dashboard background.
 

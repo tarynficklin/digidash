@@ -20,7 +20,7 @@ const isProduction = NODE_ENV === 'production';
 const root = path.join(import.meta.dirname, '..');
 
 const db = connect(CONNECTION_STRING, path.join(root, 'db'));
-const uploadsDir = uploadDir(root);
+const uploadsDir = uploadDir();
 const uploads = uploadController(uploadsDir);
 const app = new Hono();
 

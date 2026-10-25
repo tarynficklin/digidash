@@ -17,7 +17,3 @@ coverage
 # OS files (._* are macOS resource forks)
 .DS_Store
 ._*
-
-
-# local file storage (backend)
-backend/uploads
