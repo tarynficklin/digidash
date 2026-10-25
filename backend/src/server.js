@@ -11,6 +11,7 @@ import apiController from './controllers/apiController.js';
 import authController, { requireUser } from './controllers/authController.js';
 import uploadController, { MAX_UPLOAD_BYTES, uploadDir } from './controllers/uploadController.js';
 import widgetController from './controllers/widgetController.js';
+import cors from './cors.js';
 import { connect, describeError } from './db.js';
 
 //SERVER SETUP
@@ -23,6 +24,7 @@ const db = connect(DATABASE_URL, path.join(root, 'db'));
 const uploadsDir = uploadDir();
 const uploads = uploadController(uploadsDir);
 const app = new Hono();
+app.use('*', cors()); // browser origins on other domains (ALLOWED_ORIGINS)
 
 //MIDDLEWARE
 app.use('*', async (c, next) => {

@@ -30,6 +30,7 @@ Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's
 | `DATABASE_URL` | API: Postgres connection URL |
 | `PORT` | API port (default 4040); `frontend/.env`'s `VITE_API_URL` points the Vite proxy here |
 | `SESSION_SECRET` | API: signs the session cookie (falls back to a fixed dev string) |
+| `ALLOWED_ORIGINS` | API: browser origins that may call it from another address (CORS, with cookies), comma-separated, e.g. `http://localhost:3101`. Requests through the Vite proxy, or to the API serving `frontend/dist`, are same-origin and don't need it |
 | `NODE_ENV` | `production` disables the dev back door (`bun run start:backend` sets it) |
 | `UNSPLASH_KEY` | API: the background picker's Unsplash search (`GET /api/unsplash/search`), so the key stays on the server |
 | `REACT_APP_ALPHAVANTAGE` | browser: Stocks widget |
