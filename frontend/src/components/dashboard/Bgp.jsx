@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './Bgp.css';
 import { connect } from 'react-redux';
 import { setBG, setColor, setTheme } from '../../ducks/reducer';
+import { filePath, fileUrl } from '../../lib/apiBase';
 import { getPalette } from '../../lib/palette';
 import LocalUploader from '../common/LocalUploader';
 import { Scrollbars } from '../common/Scrollbars';
@@ -74,11 +75,13 @@ class Bgp extends Component {
 
   // An uploaded file joins the thumbnails (same shape as an Unsplash result) and
   // opens in the preview, so it goes through the usual palette + Finalize flow.
+  // The upload's /uploads/... path is shown from the API, and saved as the path again.
   useUpload = ({ publicUrl }) => {
-    const item = { urls: { raw: publicUrl, regular: publicUrl, small: publicUrl } };
+    const url = fileUrl(publicUrl);
+    const item = { urls: { raw: url, regular: url, small: url } };
     this.setState(
       (state) => ({ imgs: [item, ...state.imgs] }),
-      () => this.bigPicture(0, publicUrl),
+      () => this.bigPicture(0, url),
     );
   };
 
@@ -93,7 +96,7 @@ class Bgp extends Component {
     setTheme(theme);
     setColor(color);
     setBG(image);
-    axios.put(`/api/unsplash/${user_id}`, { image: newImage, color, theme });
+    axios.put(`/api/unsplash/${user_id}`, { image: filePath(newImage), color, theme });
     this.props.bgPickerToggle();
     this.props.globalToggle();
   }

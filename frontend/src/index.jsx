@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './lib/apiBase'; // sends the app's /api and /widget requests to the API (see there)
 
 import { Provider } from 'react-redux';
 import App from './App';

@@ -23,7 +23,7 @@ bun run db:seed      # (re)creates the tables from backend/db/master_seed.sql. W
 
 `bunfig.toml` sets a supply-chain cooldown: `bun install`/`bun add` never pick package versions published in the last 7 days.
 
-Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's `PORT` (default 3101), `VITE_API_URL` (the API it proxies to) and the two browser keys below (Bun and Vite load them automatically; variables already set in your shell win):
+Configuration lives in `backend/.env`, plus `frontend/.env` for the dev server's `PORT` (default 3101), `VITE_API_URL` (the API: the dev server proxies to it, and a build calls it directly, e.g. `https://api.<domain>` deployed, with this site in the API's `ALLOWED_ORIGINS`; see `frontend/src/lib/apiBase.js`) and the two browser keys below (Bun and Vite load them automatically; variables already set in your shell win):
 
 | Variable | Used by |
 | --- | --- |
@@ -47,6 +47,9 @@ No longer used: the Auth0 variables (`REACT_APP_DOMAIN`, `REACT_APP_CLIENT_ID`, 
 ```sh
 bun run dev             # API, then Vite once the API's /health answers (Turborepo)
 bun run build           # production build into frontend/dist
+bun run build:frontend  # just the frontend (what Coolify's frontend builds with)
+bun run build:backend   # bundles backend/src into backend/dist to check its imports (it runs from src)
+bun run db:migrate      # create missing tables only (backend/db/schema.sql), no demo user: before each deployed start
 bun run start:backend   # API that also serves frontend/dist, with NODE_ENV=production (no dev back door)
 bun run start:frontend  # preview frontend/dist with Vite on port 3101
 bun run test            # unit tests (bun:test)

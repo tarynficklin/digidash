@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { fileUrl } from './lib/apiBase';
 
 function AppTheme(props) {
-  const { background, themeColor, flavor, locked } = props;
+  const { themeColor, flavor, locked } = props;
+  const background = fileUrl(props.background); // an uploaded one is a path on the API
 
   const blue = '000, 174, 255',
     yellow = '255, 255, 000',
